@@ -10,9 +10,9 @@
 	<slot />
 </main>
 
-<footer>
+<!-- <footer>
 	<p>Copyright 2022</p>
-</footer>
+</footer> -->
 
 <style>
 	footer {
