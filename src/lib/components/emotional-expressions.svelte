@@ -1,175 +1,188 @@
 <script lang="ts">
 	import anime from '../../../node_modules/animejs/lib/anime.es';
+	import expressionPaths from '$lib/stores/expression-paths';
+	import { onMount, onDestroy } from 'svelte';
 
-	// const morph = (emotion) => {
-	// 	const time = 1000;
+	export const morph = (expressionPath) => {
+		const time = 1000;
 
-	// 	const timeline0 = anime.timeline({
-	// 		duration: time,
-	// 		easing: 'easeOutExpo'
-	// 	});
+		const timeline0 = anime.timeline({
+			duration: time,
+			easing: 'easeOutExpo'
+		});
 
-	// 	timeline0.add({
-	// 		targets: '.face',
-	// 		fill: [{ value: emotion.face }]
-	// 	});
+		timeline0.add({
+			targets: '.face',
+			fill: [{ value: expressionPath.face }]
+		});
 
-	// 	const timeline1 = anime.timeline({
-	// 		duration: time,
-	// 		easing: 'easeOutExpo'
-	// 	});
+		const timeline1 = anime.timeline({
+			duration: time,
+			easing: 'easeOutExpo'
+		});
 
-	// 	timeline1.add({
-	// 		targets: '.r_eye',
-	// 		d: [{ value: emotion.r_eye }]
-	// 	});
+		timeline1.add({
+			targets: '.r_eye',
+			d: [{ value: expressionPath.r_eye }]
+		});
 
-	// 	const timeline2 = anime.timeline({
-	// 		duration: time,
-	// 		easing: 'easeOutExpo'
-	// 	});
+		const timeline2 = anime.timeline({
+			duration: time,
+			easing: 'easeOutExpo'
+		});
 
-	// 	timeline2.add({
-	// 		targets: '.l_eye',
-	// 		d: [{ value: emotion.l_eye }]
-	// 	});
+		timeline2.add({
+			targets: '.l_eye',
+			d: [{ value: expressionPath.l_eye }]
+		});
 
-	// 	const timeline3 = anime.timeline({
-	// 		duration: time,
-	// 		easing: 'easeOutExpo'
-	// 	});
+		const timeline3 = anime.timeline({
+			duration: time,
+			easing: 'easeOutExpo'
+		});
 
-	// 	timeline3.add({
-	// 		targets: '.r_eyebrow',
-	// 		d: [{ value: emotion.r_eyebrow }]
-	// 	});
+		timeline3.add({
+			targets: '.r_eyebrow',
+			d: [{ value: expressionPath.r_eyebrow }]
+		});
 
-	// 	const timeline4 = anime.timeline({
-	// 		duration: time,
-	// 		easing: 'easeOutExpo'
-	// 	});
+		const timeline4 = anime.timeline({
+			duration: time,
+			easing: 'easeOutExpo'
+		});
 
-	// 	timeline4.add({
-	// 		targets: '.l_eyebrow',
-	// 		d: [{ value: emotion.l_eyebrow }]
-	// 	});
+		timeline4.add({
+			targets: '.l_eyebrow',
+			d: [{ value: expressionPath.l_eyebrow }]
+		});
 
-	// 	var mouse_color = '';
+		// TODO: insert mouse_color property to the paths
+		let mouse_color = '';
 
-	// 	if (emotion.id == 'anger') {
-	// 		mouse_color = '#000';
-	// 	} else {
-	// 		mouse_color = '#FF3D3D';
-	// 	}
+		if (expressionPath.id == 'anger') {
+			mouse_color = '#000';
+		} else {
+			mouse_color = '#FF3D3D';
+		}
 
-	// 	const timeline5 = anime.timeline({
-	// 		duration: time,
-	// 		easing: 'easeOutExpo'
-	// 	});
+		const timeline5 = anime.timeline({
+			duration: time,
+			easing: 'easeOutExpo'
+		});
 
-	// 	timeline5.add({
-	// 		targets: '.mouse',
-	// 		d: [{ value: emotion.mouse }],
-	// 		fill: [{ value: mouse_color }]
-	// 	});
+		timeline5.add({
+			targets: '.mouse',
+			d: [{ value: expressionPath.mouse }],
+			fill: [{ value: mouse_color }]
+		});
 
-	// 	anime
-	// 		.timeline({
-	// 			duration: 200
-	// 		})
-	// 		.add({
-	// 			begin: function () {
-	// 				if (emotion.id != 'sadness') {
-	// 					document.querySelector('.option_sad1').style.display = 'none';
-	// 					document.querySelector('.option_sad2').style.display = 'none';
-	// 				}
-	// 			},
-	// 			complete: function () {
-	// 				if (emotion.id == 'sadness') {
-	// 					document.querySelector('.option_sad1').style.display = 'block';
-	// 					document.querySelector('.option_sad2').style.display = 'block';
-	// 				}
-	// 			}
-	// 		});
+		// TODO: anime
+		anime
+			.timeline({
+				duration: 200
+			})
+			.add({
+				begin: function () {
+					if (expressionPath.id != 'sadness') {
+						(document.querySelector('.option_sad1') as HTMLElement).style.display = 'none';
+						(document.querySelector('.option_sad2') as HTMLElement).style.display = 'none';
+					}
+				},
+				complete: function () {
+					if (expressionPath.id == 'sadness') {
+						(document.querySelector('.option_sad1') as HTMLElement).style.display = 'block';
+						(document.querySelector('.option_sad2') as HTMLElement).style.display = 'block';
+					}
+				}
+			});
 
-	// 	anime
-	// 		.timeline({
-	// 			duration: 200
-	// 		})
-	// 		.add({
-	// 			begin: function () {
-	// 				if (emotion.id != 'fear') {
-	// 					document.querySelector('.option_fear1').style.display = 'none';
-	// 					document.querySelector('.option_fear2').style.display = 'none';
-	// 				}
-	// 			},
-	// 			complete: function () {
-	// 				if (emotion.id == 'fear') {
-	// 					document.querySelector('.option_fear1').style.display = 'block';
-	// 					document.querySelector('.option_fear2').style.display = 'block';
-	// 				}
-	// 			}
-	// 		});
+		anime
+			.timeline({
+				duration: 200
+			})
+			.add({
+				begin: function () {
+					if (expressionPath.id != 'fear') {
+						(document.querySelector('.option_fear1') as HTMLElement).style.display = 'none';
+						(document.querySelector('.option_fear2') as HTMLElement).style.display = 'none';
+					}
+				},
+				complete: function () {
+					if (expressionPath.id == 'fear') {
+						(document.querySelector('.option_fear1') as HTMLElement).style.display = 'block';
+						(document.querySelector('.option_fear2') as HTMLElement).style.display = 'block';
+					}
+				}
+			});
 
-	// 	anime
-	// 		.timeline({
-	// 			duration: 300
-	// 		})
-	// 		.add({
-	// 			begin: function () {
-	// 				if (emotion.id != 'disgust') {
-	// 					document.querySelector('.option_disgust').style.display = 'none';
-	// 				}
-	// 			},
-	// 			complete: function () {
-	// 				if (emotion.id == 'disgust') {
-	// 					document.querySelector('.option_disgust').style.display = 'block';
-	// 				}
-	// 			}
-	// 		});
+		anime
+			.timeline({
+				duration: 300
+			})
+			.add({
+				begin: function () {
+					if (expressionPath.id != 'disgust') {
+						(document.querySelector('.option_disgust') as HTMLElement).style.display = 'none';
+					}
+				},
+				complete: function () {
+					if (expressionPath.id == 'disgust') {
+						(document.querySelector('.option_disgust') as HTMLElement).style.display = 'block';
+					}
+				}
+			});
 
-	// 	anime
-	// 		.timeline({
-	// 			duration: 200
-	// 		})
-	// 		.add({
-	// 			begin: function () {
-	// 				if (emotion.id != 'wait') {
-	// 					document.querySelectorAll('.option_wait').forEach((_wait) => {
-	// 						_wait.style.display = 'none';
-	// 					});
-	// 				}
-	// 			},
-	// 			complete: function () {
-	// 				if (emotion.id == 'wait') {
-	// 					document.querySelectorAll('.option_wait').forEach((_wait) => {
-	// 						_wait.style.display = 'block';
-	// 					});
-	// 				}
-	// 			}
-	// 		});
+		anime
+			.timeline({
+				duration: 200
+			})
+			.add({
+				begin: function () {
+					if (expressionPath.id != 'wait') {
+						document.querySelectorAll('.option_wait').forEach((_wait) => {
+							(_wait as HTMLElement).style.display = 'none';
+						});
+					}
+				},
+				complete: function () {
+					if (expressionPath.id == 'wait') {
+						document.querySelectorAll('.option_wait').forEach((_wait) => {
+							(_wait as HTMLElement).style.display = 'block';
+						});
+					}
+				}
+			});
 
-	// 	anime
-	// 		.timeline({
-	// 			duration: 200
-	// 		})
-	// 		.add({
-	// 			begin: function () {
-	// 				if (emotion.id != 'listen') {
-	// 					document.querySelectorAll('.option_listen').forEach((_listen) => {
-	// 						_listen.style.display = 'none';
-	// 					});
-	// 				}
-	// 			},
-	// 			complete: function () {
-	// 				if (emotion.id == 'listen') {
-	// 					document.querySelectorAll('.option_listen').forEach((_listen) => {
-	// 						_listen.style.display = 'block';
-	// 					});
-	// 				}
-	// 			}
-	// 		});
-	// };
+		anime
+			.timeline({
+				duration: 200
+			})
+			.add({
+				begin: function () {
+					if (expressionPath.id != 'listen') {
+						document.querySelectorAll('.option_listen').forEach((_listen) => {
+							(_listen as HTMLElement).style.display = 'none';
+						});
+					}
+				},
+				complete: function () {
+					if (expressionPath.id == 'listen') {
+						document.querySelectorAll('.option_listen').forEach((_listen) => {
+							(_listen as HTMLElement).style.display = 'block';
+						});
+					}
+				}
+			});
+	};
+
+	onMount(() => {
+		// morph($expressionPaths[3]);
+		console.log('component mounted');
+	});
+
+	onDestroy(() => {
+		console.log('component destroyed');
+	});
 </script>
 
 <div class="emotional-expressions">
@@ -242,13 +255,15 @@
 			d="M130.617 181.553C134.43 184.427 130.687 186.255 126.662 183.686C124.299 182.179 121.606 181.024 118.666 180.702C115.727 180.38 112.847 180.924 110.215 181.884C105.728 183.52 102.47 180.925 106.815 178.945C110.317 177.349 114.574 176.637 119.058 177.128C123.542 177.62 127.543 179.236 130.617 181.553Z"
 			fill="black"
 		/>
+
+		<!-- effect -->
 		<path
 			id="_bubble"
 			d="M281.527 177.738L391.62 102.15L409.853 140.772L281.527 177.738Z"
 			fill="#2B2B2B"
 		/>
 
-		<!-- system : listen -->
+		<!-- status: listen -->
 		<path
 			class="option_listen"
 			d="M269.6 155.276C258.494 181.199 235.1 196.049 217.348 188.444C199.596 180.839 200.91 154.853 212.016 128.93C223.121 103.007 239.812 86.9626 257.564 94.5677C275.317 102.173 280.705 129.353 269.6 155.276Z"
@@ -297,7 +312,7 @@
 			mask="url(#path-10-inside-3)"
 		/>
 
-		<!-- system : wait -->
+		<!-- status: wait -->
 		<circle
 			class="option_wait"
 			id="wait_light"
