@@ -2,9 +2,6 @@
 	import anime from '../../../node_modules/animejs/lib/anime.es';
 	import expressionPaths from '$lib/stores/expression-paths';
 	import { onMount, onDestroy } from 'svelte';
-	import { createEventDispatcher } from 'svelte';
-
-	const dispatch = createEventDispathcer();
 
 	export let expressionNo: number;
 
@@ -180,14 +177,12 @@
 			});
 	};
 
-	const changeExpression = () => {
-		dispatch('changeExpression', {
-			expressionNo
-		});
-	};
-
 	onMount(() => {
-		morph($expressionPaths[expressionNo]);
+		$: {
+			expressionNo, morph($expressionPaths[expressionNo]);
+		}
+
+		// morph($expressionPaths[expressionNo]);
 		console.log('component mounted');
 	});
 

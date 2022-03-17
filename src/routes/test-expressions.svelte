@@ -44,6 +44,7 @@
 			default:
 				console.log('Invalid input');
 		}
+		console.log('=>', expressionNo);
 	};
 </script>
 
