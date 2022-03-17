@@ -2,8 +2,13 @@
 	import anime from '../../../node_modules/animejs/lib/anime.es';
 	import expressionPaths from '$lib/stores/expression-paths';
 	import { onMount, onDestroy } from 'svelte';
+	import { createEventDispatcher } from 'svelte';
 
-	export const morph = (expressionPath) => {
+	const dispatch = createEventDispathcer();
+
+	export let expressionNo: number;
+
+	const morph = (expressionPath) => {
 		const time = 1000;
 
 		const timeline0 = anime.timeline({
@@ -175,8 +180,14 @@
 			});
 	};
 
+	const changeExpression = () => {
+		dispatch('changeExpression', {
+			expressionNo
+		});
+	};
+
 	onMount(() => {
-		// morph($expressionPaths[3]);
+		morph($expressionPaths[expressionNo]);
 		console.log('component mounted');
 	});
 

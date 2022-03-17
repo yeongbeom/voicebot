@@ -1,17 +1,18 @@
 <script lang="ts">
 	import FontControls from '$lib/components/font-controls.svelte';
-
 	import EmotionalExpressions from '$lib/components/emotional-expressions.svelte';
-
-	import ExpressionControls from '$lib/components/expression-controls.svelte';
-	import expressionPaths from '$lib/stores/expression-paths';
 </script>
 
 <div>
+	<a href="/test-expressions">Test expressions</a>
+
 	<FontControls />
 
 	<EmotionalExpressions />
-
-	<ExpressionControls />
-	{$expressionPaths[0].id}
 </div>
+
+<style>
+	a {
+		font-size: 5rem;
+	}
+</style>
