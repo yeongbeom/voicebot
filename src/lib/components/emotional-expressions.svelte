@@ -2,8 +2,20 @@
 	import anime from '../../../node_modules/animejs/lib/anime.es';
 	import expressionPaths from '$lib/stores/expression-paths';
 	import { onMount, onDestroy } from 'svelte';
+	import expressionWatcher from '$lib/stores/expression-watcher';
 
 	export let expressionNo: number;
+
+	const i = expressionWatcher(0, watchFunction);
+
+	function watchFunction(a, b) {
+		console.log(`${a} + 1 = ${b}`);
+		console.log(`$i = ${$i}`);
+		morph($expressionPaths[$i]);
+	}
+	function inc() {
+		$i++;
+	}
 
 	const morph = (expressionPath) => {
 		const time = 1000;
@@ -178,11 +190,11 @@
 	};
 
 	onMount(() => {
-		$: {
-			expressionNo, morph($expressionPaths[expressionNo]);
-		}
-
+		// $: if ($i) {
+		// 	morph($expressionPaths[$i]);
+		// }
 		// morph($expressionPaths[expressionNo]);
+		// morph($expressionPaths[$i]);
 		console.log('component mounted');
 	});
 
@@ -190,6 +202,9 @@
 		console.log('component destroyed');
 	});
 </script>
+
+<h1>i = {$i}</h1>
+<button on:click={inc}>INCREMEMNT</button>
 
 <div class="emotional-expressions">
 	<svg
