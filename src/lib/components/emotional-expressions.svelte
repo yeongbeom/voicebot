@@ -1,20 +1,16 @@
 <script lang="ts">
-	import anime from '../../../node_modules/animejs/lib/anime.es';
 	import expressionPaths from '$lib/stores/expression-paths';
-	import { onMount, onDestroy } from 'svelte';
 	import expressionWatcher from '$lib/stores/expression-watcher';
+	import Button from '$lib/shared/button.svelte';
+	import anime from '../../../node_modules/animejs/lib/anime.es';
+	import { onMount, onDestroy } from 'svelte';
 
-	export let expressionNo: number;
-
-	const i = expressionWatcher(0, watchFunction);
+	let expressionNo = expressionWatcher(0, watchFunction);
 
 	function watchFunction(a, b) {
 		console.log(`${a} + 1 = ${b}`);
-		console.log(`$i = ${$i}`);
-		morph($expressionPaths[$i]);
-	}
-	function inc() {
-		$i++;
+		console.log(`$i = ${$expressionNo}`);
+		morph($expressionPaths[$expressionNo]);
 	}
 
 	const morph = (expressionPath) => {
@@ -190,21 +186,70 @@
 	};
 
 	onMount(() => {
-		// $: if ($i) {
-		// 	morph($expressionPaths[$i]);
-		// }
-		// morph($expressionPaths[expressionNo]);
-		// morph($expressionPaths[$i]);
 		console.log('component mounted');
 	});
 
 	onDestroy(() => {
 		console.log('component destroyed');
 	});
+
+	const handleClick = (e) => {
+		const expression = e.target.innerText;
+
+		switch (expression) {
+			case 'neutral':
+				$expressionNo = 0;
+				break;
+			case 'happy':
+				$expressionNo = 1;
+				break;
+			case 'worry':
+				$expressionNo = 2;
+				break;
+			case 'anger':
+				$expressionNo = 3;
+				break;
+			case 'surprise':
+				$expressionNo = 4;
+				break;
+			case 'sadness':
+				$expressionNo = 5;
+				break;
+			case 'fear':
+				$expressionNo = 6;
+				break;
+			case 'disgust':
+				$expressionNo = 7;
+				break;
+			case 'contempt':
+				$expressionNo = 8;
+				break;
+			case 'wait':
+				$expressionNo = 9;
+				break;
+			case 'listen':
+				$expressionNo = 10;
+				break;
+			default:
+				$expressionNo = 0;
+				console.log('Invalid input');
+		}
+	};
 </script>
 
-<h1>i = {$i}</h1>
-<button on:click={inc}>INCREMEMNT</button>
+<div>
+	<div class="control-btn">
+		<Button on:click={handleClick} type="classic" flat={true}>neutral</Button>
+		<Button on:click={handleClick} type="classic" flat={true}>happy</Button>
+		<Button on:click={handleClick} type="classic" flat={true}>disgust</Button>
+		<Button on:click={handleClick} type="classic" flat={true}>surprise</Button>
+		<Button on:click={handleClick} type="classic" flat={true}>anger</Button>
+		<Button on:click={handleClick} type="classic" flat={true}>sadness</Button>
+		<Button on:click={handleClick} type="classic" flat={true}>fear</Button>
+		<Button on:click={handleClick} type="classic" flat={true}>worry</Button>
+		<Button on:click={handleClick} type="classic" flat={true}>contempt</Button>
+	</div>
+</div>
 
 <div class="emotional-expressions">
 	<svg
