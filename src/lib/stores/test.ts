@@ -1,3 +1,3 @@
-import { readable } from "svelte/store";
+import { writable } from "svelte/store";
 
-export const testPath = readable(1);
+export const test = writable(['TesT'])

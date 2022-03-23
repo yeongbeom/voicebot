@@ -1,8 +1,7 @@
-import { readable } from "svelte/store";
+import { readable } from 'svelte/store';
 
-const expressionPaths = readable([
-	{
-		id: 'neutral',
+const expressionPaths = readable({
+	neutral: {
 		face: '#FFE600',
 		r_eyebrow:
 			'M199.5 67.5789C199.5 67.5789 188.307 48.5789 174.5 48.5789C160.693 48.5789 149.5 67.5789 149.5 67.5789C149.5 53.7717 160.693 42.5789 174.5 42.5789C188.307 42.5789 199.5 53.7717 199.5 67.5789Z',
@@ -20,8 +19,8 @@ const expressionPaths = readable([
 		option_fear2: '',
 		option_disgust: ''
 	},
-	{
-		id: 'happy',
+
+	happiness: {
 		face: '#FFE600',
 		r_eye:
 			'M201 105C201 105 189.807 93.0788 176 93.0788C162.193 93.0788 151 105 151 105C151 91.1929 162.193 80 176 80C189.807 80 201 91.1929 201 105Z',
@@ -40,8 +39,7 @@ const expressionPaths = readable([
 		option_disgust: ''
 	},
 
-	{
-		id: 'worry',
+	worry: {
 		face: '#FFE600',
 		l_eyebrow:
 			'M54 57.4035C54 57.4035 71.1063 71.3195 84.05 66.5136C96.9938 61.7078 100.873 40 100.873 40C105.679 52.9437 99.0822 67.3326 86.1385 72.1385C73.1947 76.9443 58.8058 70.3472 54 57.4035Z',
@@ -60,8 +58,7 @@ const expressionPaths = readable([
 		option_disgust: ''
 	},
 
-	{
-		id: 'anger',
+	anger: {
 		face: '#FF3D3D',
 		l_eye:
 			'M87.5 110C87.5 122.703 85.7025 133 73 133C60.2975 133 58 122.703 58 110C58 97.2975 60.2975 87 73 87C85.7025 87 87.5 97.2975 87.5 110Z',
@@ -80,8 +77,7 @@ const expressionPaths = readable([
 		option_disgust: ''
 	},
 
-	{
-		id: 'surprise',
+	surprise: {
 		face: '#FFE600',
 		r_eyebrow:
 			'M199.5 42.5789C199.5 42.5789 188.307 23.5789 174.5 23.5789C160.693 23.5789 149.5 42.5789 149.5 42.5789C149.5 28.7717 160.693 17.5789 174.5 17.5789C188.307 17.5789 199.5 28.7717 199.5 42.5789Z',
@@ -100,8 +96,7 @@ const expressionPaths = readable([
 		option_disgust: ''
 	},
 
-	{
-		id: 'sadness',
+	sadness: {
 		face: '#FFE600',
 		r_eye:
 			'M194 111.058C194 119.927 191.928 111.058 177.288 111.058C162.648 111.058 160 119.927 160 111.058C160 102.19 162.648 95 177.288 95C191.928 95 194 102.19 194 111.058Z',
@@ -122,8 +117,7 @@ const expressionPaths = readable([
 		option_disgust: ''
 	},
 
-	{
-		id: 'fear',
+	fear: {
 		face: '#FFE600',
 		r_eye:
 			'M193 118.525C193 137.593 190.928 118.525 176.288 118.525C161.648 118.525 159 137.593 159 118.525C159 99.4575 161.648 84 176.288 84C190.928 84 193 99.4575 193 118.525Z',
@@ -144,8 +138,7 @@ const expressionPaths = readable([
 		option_disgust: ''
 	},
 
-	{
-		id: 'disgust',
+	disgust: {
 		face: '#FFE600',
 		l_eye:
 			'M91 109.011C91 116.198 88 116.5 71.339 111.5C53.5 116.5 51 116.198 51 109.011C51 101.825 54.1152 96 71.339 96C88.5628 96 91 101.825 91 109.011Z',
@@ -165,8 +158,7 @@ const expressionPaths = readable([
 		option_fear2: ''
 	},
 
-	{
-		id: 'contempt',
+	contempt: {
 		face: '#FFE600',
 		l_eye:
 			'M89.5 110C89.5 122.703 87.7025 133 75 133C62.2975 133 60 122.703 60 110C60 110 62.2975 110 75 110C87.7025 110 89.5 110 89.5 110Z',
@@ -184,8 +176,8 @@ const expressionPaths = readable([
 		option_fear1: '',
 		option_fear2: ''
 	},
-	{
-		id: 'wait',
+
+	wait: {
 		face: '#FFE600',
 		l_eye:
 			'M67.5 96C67.5 108.703 65.7025 119 53 119C40.2975 119 38 108.703 38 96C38 83.2975 40.2975 73 53 73C65.7025 73 67.5 83.2975 67.5 96Z',
@@ -198,8 +190,8 @@ const expressionPaths = readable([
 		mouse:
 			'M111 161.005C111 167.743 105.851 171 99.5 171C93.1487 171 88 167.743 88 161.005C88 154.267 93.1487 151 99.5 151C105.851 151 111 154.267 111 161.005Z'
 	},
-	{
-		id: 'listen',
+
+	listen: {
 		face: '#FFE600',
 		l_eye:
 			'M70.5 129C70.5 141.703 68.7025 152 56 152C43.2975 152 41 141.703 41 129C41 116.297 43.2975 106 56 106C68.7025 106 70.5 116.297 70.5 129Z',
@@ -212,6 +204,6 @@ const expressionPaths = readable([
 		mouse:
 			'M123 200.582C123 208.942 115.837 210 107 210C98.1634 210 91 208.942 91 200.582C91 192.223 98.1634 194.205 107 194.205C115.837 194.205 123 192.223 123 200.582Z'
 	}
-]);
+});
 
 export default expressionPaths;

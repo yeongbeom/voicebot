@@ -5,8 +5,8 @@ function expressionWatcher(initialValue, watchFunction) {
     return {
         subscribe,
         set: value => {
-            update(oldvalue => {
-                watchFunction(oldvalue, value)
+            update(() => {
+                watchFunction()
                 return value
             })
         }

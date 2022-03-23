@@ -5,12 +5,10 @@
 	import anime from '../../../node_modules/animejs/lib/anime.es';
 	import { onMount, onDestroy } from 'svelte';
 
-	let expressionNo = expressionWatcher(0, watchFunction);
+	const expression = expressionWatcher('neutral', watchFunction);
 
-	function watchFunction(a, b) {
-		console.log(`${a} + 1 = ${b}`);
-		console.log(`$i = ${$expressionNo}`);
-		morph($expressionPaths[$expressionNo]);
+	function watchFunction() {
+		morph($expressionPaths[$expression]);
 	}
 
 	const morph = (expressionPath) => {
@@ -194,53 +192,14 @@
 	});
 
 	const handleClick = (e) => {
-		const expression = e.target.innerText;
-
-		switch (expression) {
-			case 'neutral':
-				$expressionNo = 0;
-				break;
-			case 'happy':
-				$expressionNo = 1;
-				break;
-			case 'worry':
-				$expressionNo = 2;
-				break;
-			case 'anger':
-				$expressionNo = 3;
-				break;
-			case 'surprise':
-				$expressionNo = 4;
-				break;
-			case 'sadness':
-				$expressionNo = 5;
-				break;
-			case 'fear':
-				$expressionNo = 6;
-				break;
-			case 'disgust':
-				$expressionNo = 7;
-				break;
-			case 'contempt':
-				$expressionNo = 8;
-				break;
-			case 'wait':
-				$expressionNo = 9;
-				break;
-			case 'listen':
-				$expressionNo = 10;
-				break;
-			default:
-				$expressionNo = 0;
-				console.log('Invalid input');
-		}
+		$expression = e.target.innerText;
 	};
 </script>
 
 <div>
 	<div class="control-btn">
 		<Button on:click={handleClick} type="classic" flat={true}>neutral</Button>
-		<Button on:click={handleClick} type="classic" flat={true}>happy</Button>
+		<Button on:click={handleClick} type="classic" flat={true}>happiness</Button>
 		<Button on:click={handleClick} type="classic" flat={true}>disgust</Button>
 		<Button on:click={handleClick} type="classic" flat={true}>surprise</Button>
 		<Button on:click={handleClick} type="classic" flat={true}>anger</Button>
