@@ -7,10 +7,6 @@
 
 	const expression = expressionWatcher('neutral', watchFunction);
 
-	function watchFunction() {
-		morph($expressionPaths[$expression]);
-	}
-
 	const morph = (expressionPath) => {
 		const time = 1000;
 
@@ -183,6 +179,16 @@
 			});
 	};
 
+	const handleClick = (e) => {
+		$expression = e.target.innerText;
+	};
+
+	function watchFunction() {
+		morph($expressionPaths[$expression]);
+	}
+
+	let hasShown = true;
+
 	onMount(() => {
 		console.log('component mounted');
 	});
@@ -190,10 +196,6 @@
 	onDestroy(() => {
 		console.log('component destroyed');
 	});
-
-	const handleClick = (e) => {
-		$expression = e.target.innerText;
-	};
 </script>
 
 <div>
@@ -446,3 +448,9 @@
 		/>
 	</svg>
 </div>
+
+<style>
+	.control-btn {
+		display: none;
+	}
+</style>

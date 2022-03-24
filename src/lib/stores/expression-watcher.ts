@@ -1,6 +1,6 @@
 import { writable } from 'svelte/store';
 
-function expressionWatcher(initialValue, watchFunction) {
+const expressionWatcher = (initialValue, watchFunction) => {
 	const { subscribe } = writable(initialValue);
 	return {
 		subscribe,
@@ -9,6 +9,6 @@ function expressionWatcher(initialValue, watchFunction) {
 			// return expr;
 		}
 	};
-}
+};
 
 export default expressionWatcher;
