@@ -1,6 +1,7 @@
 import { writable } from 'svelte/store';
 
-const expressionWatcher = (initialValue, watchFunction) => {
+const expressionWatcher = (watchFunction) => {
+	const initialValue = '';
 	const { subscribe } = writable(initialValue);
 	return {
 		subscribe,

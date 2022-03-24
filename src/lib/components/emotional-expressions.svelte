@@ -5,7 +5,7 @@
 	import anime from '../../../node_modules/animejs/lib/anime.es';
 	import { onMount, onDestroy } from 'svelte';
 
-	const expression = expressionWatcher('neutral', watchFunction);
+	const expression = expressionWatcher(watchFunction);
 
 	const morph = (expressionPath) => {
 		const time = 1000;
@@ -187,19 +187,22 @@
 		morph($expressionPaths[$expression]);
 	}
 
-	let hasShown = true;
+	let showBtn = false;
 
 	onMount(() => {
 		console.log('component mounted');
+		$expression = 'neutral';
+		showBtn = true;
 	});
 
 	onDestroy(() => {
 		console.log('component destroyed');
+		showBtn = false;
 	});
 </script>
 
 <div>
-	<div class="control-btn">
+	<div class="control-btn" class:showBtn>
 		<Button on:click={handleClick} type="classic" flat={true}>neutral</Button>
 		<Button on:click={handleClick} type="classic" flat={true}>happiness</Button>
 		<Button on:click={handleClick} type="classic" flat={true}>disgust</Button>
@@ -452,5 +455,8 @@
 <style>
 	.control-btn {
 		display: none;
+	}
+	.showBtn {
+		display: block;
 	}
 </style>
