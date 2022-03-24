@@ -1,16 +1,14 @@
-import { writable } from 'svelte/store'
+import { writable } from 'svelte/store';
 
 function expressionWatcher(initialValue, watchFunction) {
-    const { subscribe, update } = writable(initialValue)
-    return {
-        subscribe,
-        set: value => {
-            update(() => {
-                watchFunction()
-                return value
-            })
-        }
-    }
+	const { subscribe } = writable(initialValue);
+	return {
+		subscribe,
+		set: (expr: string) => {
+			watchFunction();
+			// return expr;
+		}
+	};
 }
 
-export default expressionWatcher
+export default expressionWatcher;
