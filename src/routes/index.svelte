@@ -1,6 +1,6 @@
 <script lang="ts">
 	import FontControls from '$lib/components/font-controls.svelte';
-	import EmotionalExpressions from '$lib/components/emotional-expressions/basic.svelte';
+	import EmotionalExpressions from '$lib/components/expressions/basic.svelte';
 
 
 

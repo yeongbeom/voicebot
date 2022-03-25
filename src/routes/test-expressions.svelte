@@ -1,9 +1,9 @@
 <script lang="ts">
-	import BasicEmotionalExpression from '$lib/components/emotional-expressions/basic.svelte';
+	import BasicExpression from '$lib/components/expressions/basic.svelte';
 </script>
 
 <div>
-	<BasicEmotionalExpression />
+	<BasicExpression />
 </div>
 
 <style>
