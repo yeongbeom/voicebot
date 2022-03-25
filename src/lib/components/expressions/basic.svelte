@@ -423,7 +423,7 @@
 	});
 </script>
 
-<div class="control-btn" class:show>
+<div class="test-btn" class:show>
 	<!-- control emotional expressions -->
 	<div>
 		<Button on:click={changeExpression} type="classic" flat={true}>neutral</Button>
@@ -686,7 +686,7 @@
 
 <style>
 	/* button */
-	.control-btn {
+	.test-btn {
 		display: none;
 	}
 	.show {
