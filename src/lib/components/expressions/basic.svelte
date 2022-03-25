@@ -394,15 +394,18 @@
 	};
 
 	// logic
+	let emotion = 'neutral';
+	let show = false;
+
 	const expression = expressionWatcher(watchFunction);
 	function watchFunction() {
 		morph(expressionPaths[$expression]);
 	}
 	const handleClick = (e) => {
-		$expression = e.target.innerText;
-		document.getElementById('_face').setAttribute('class', $expression);
+		const expr = e.target.innerText;
+		emotion = expr;
+		$expression = expr;
 	};
-	let show = false;
 
 	onMount(() => {
 		console.log('component mounted');
@@ -437,7 +440,7 @@
 
 <div class="expressions">
 	<svg
-		class="neutral"
+		class={emotion}
 		id="_face"
 		width="250"
 		height="250"
