@@ -395,6 +395,7 @@
 
 	// logic
 	let emotion = 'neutral';
+	let talk = false;
 	let show = false;
 
 	const expression = expressionWatcher(watchFunction);
@@ -402,8 +403,9 @@
 		morph(expressionPaths[$expression]);
 	}
 	const handleClick = (e) => {
-		const expr = e.target.innerText;
+		const expr = e.target.innerText.toLowerCase();
 		emotion = expr;
+		talk = true;
 		$expression = expr;
 	};
 
@@ -462,6 +464,7 @@
 		/>
 		<path
 			class="mouse"
+			class:talk
 			id="mouse"
 			d="M141 184.582C141 192.942 133.837 194 125 194C116.163 194 109 192.942 109 184.582C109 176.223 116.163 178.205 125 178.205C133.837 178.205 141 176.223 141 184.582Z"
 			fill="#FF3D3D"
