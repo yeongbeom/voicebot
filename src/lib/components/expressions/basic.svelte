@@ -448,8 +448,8 @@
 
 <div class="expression-container">
 	<svg
-		class={emotion}
-		id="expression"
+		class="expression"
+		id={emotion}
 		width="250"
 		height="250"
 		viewBox="0 0 250 250"
@@ -682,7 +682,7 @@
 		--face-size: 300px;
 	}
 
-	#expression {
+	.expression {
 		width: var(--face-size);
 		height: var(--face-size);
 		overflow: visible;
@@ -710,12 +710,12 @@
 		animation: _talk 2s infinite;
 	}
 
-	.happiness .r_eye,
-	.happiness .l_eye,
-	.disgust .r_eye,
-	.disgust .l_eye,
-	.sadness .r_eye,
-	.sadness .l_eye {
+	#happiness .r_eye,
+	#happiness .l_eye,
+	#disgust .r_eye,
+	#disgust .l_eye,
+	#sadness .r_eye,
+	#sadness .l_eye {
 		animation: none;
 	}
 
@@ -742,10 +742,10 @@
 		}
 	}
 
-	.happiness .talk,
-	.surprise .talk,
-	.surprise .r_eye,
-	.surprise .l_eye {
+	#happiness .talk,
+	#surprise .talk,
+	#surprise .r_eye,
+	#surprise .l_eye {
 		transform-origin: top;
 		transform-box: fill-box;
 		animation: _bigmousetalk 2s infinite;
@@ -788,14 +788,14 @@
 		}
 	}
 
-	.anger .r_eyebrow,
-	.disgust .r_eyebrow,
-	.sadness .r_eyebrow {
+	#anger .r_eyebrow,
+	#disgust .r_eyebrow,
+	#sadness .r_eyebrow {
 		animation: eyebrow_R 1s linear infinite both;
 	}
-	.anger .l_eyebrow,
-	.disgust .l_eyebrow,
-	.sadness .l_eyebrow {
+	#anger .l_eyebrow,
+	#disgust .l_eyebrow,
+	#sadness .l_eyebrow {
 		animation: eyebrow_L 1s linear infinite both;
 	}
 
@@ -818,9 +818,9 @@
 		}
 	}
 
-	.contempt .l_eyebrow,
-	.surprise .l_eyebrow,
-	.surprise .r_eyebrow {
+	#contempt .l_eyebrow,
+	#surprise .l_eyebrow,
+	#surprise .r_eyebrow {
 		animation: upDown 2s linear infinite both;
 	}
 
@@ -836,7 +836,7 @@
 		}
 	}
 
-	.disgust .talk {
+	#disgust .talk {
 		transform-box: fill-box;
 		animation: _disgustTalk 2s linear infinite both;
 	}
@@ -853,7 +853,7 @@
 		}
 	}
 
-	.contempt .talk {
+	#contempt .talk {
 		transform-box: fill-box;
 		animation: _contemptTalk 3s linear infinite both;
 	}
