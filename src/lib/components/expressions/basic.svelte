@@ -1,16 +1,10 @@
-<script context="module">
-	export const ssr = false;
-</script>
-
 <script lang="ts">
 	import anime from 'animejs/lib/anime.es';
-	import { onMount, onDestroy } from 'svelte';
 	import { browser } from '$app/env';
 
 	export let expression: string;
 	export let talk: boolean;
 
-	// animation
 	const expressionPaths = {
 		neutral: {
 			expression: 'neutral',
@@ -403,13 +397,6 @@
 		expression;
 		browser && morph(expressionPaths[expression]);
 	}
-
-	onMount(() => {
-		console.log('basic.svelte mounted');
-	});
-	onDestroy(() => {
-		console.log('basic.svelte destroyed');
-	});
 </script>
 
 <div class="expression-container">
