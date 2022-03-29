@@ -1,10 +1,14 @@
+<script context="module">
+	export const ssr = false;
+</script>
+
 <script lang="ts">
-	import expressionWatcher from '$lib/stores/expression-watcher';
-	import Button from '$lib/shared/button.svelte';
 	import anime from 'animejs/lib/anime.es';
 	import { onMount, onDestroy } from 'svelte';
+	import { browser } from '$app/env';
 
-	export let showTestBtns;
+	export let expression: string;
+	export let talk: boolean;
 
 	// animation
 	const expressionPaths = {
@@ -395,27 +399,13 @@
 			});
 	};
 
-	// logic
-	let emotion = 'neutral';
-	let talk = false;
-
-	const expression = expressionWatcher(watchFunction);
-	function watchFunction() {
-		morph(expressionPaths[$expression]);
+	$: {
+		expression;
+		browser && morph(expressionPaths[expression]);
 	}
-	const changeExpression = (e) => {
-		const expr = e.target.innerText.toLowerCase();
-		emotion = expr;
-		$expression = expr;
-	};
-
-	const toggleTalkStatus = () => {
-		talk = !talk;
-	};
 
 	onMount(() => {
 		console.log('basic.svelte mounted');
-		$expression = 'neutral';
 	});
 	onDestroy(() => {
 		console.log('basic.svelte destroyed');
@@ -425,7 +415,7 @@
 <div class="expression-container">
 	<svg
 		class="expression"
-		id={emotion}
+		id={expression}
 		width="250"
 		height="250"
 		viewBox="0 0 250 250"
@@ -653,29 +643,6 @@
 	</svg>
 </div>
 
-<div class="test-btns" class:show-test-btns={showTestBtns}>
-	<!-- control emotional expressions -->
-	<div>
-		<Button on:click={changeExpression} type="classic" flat={true}>neutral</Button>
-		<Button on:click={changeExpression} type="classic" flat={true}>happiness</Button>
-		<Button on:click={changeExpression} type="classic" flat={true}>disgust</Button>
-		<Button on:click={changeExpression} type="classic" flat={true}>surprise</Button>
-		<Button on:click={changeExpression} type="classic" flat={true}>anger</Button>
-		<Button on:click={changeExpression} type="classic" flat={true}>sadness</Button>
-		<Button on:click={changeExpression} type="classic" flat={true}>fear</Button>
-		<Button on:click={changeExpression} type="classic" flat={true}>worry</Button>
-		<Button on:click={changeExpression} type="classic" flat={true}>contempt</Button>
-	</div>
-	<!-- control status-->
-	<div>
-		<Button on:click={changeExpression} type="classic" flat={true}>wait</Button>
-		<Button on:click={changeExpression} type="classic" flat={true}>listen</Button>
-	</div>
-	<div>
-		<Button on:click={toggleTalkStatus} type="primary" flat={true}>talk</Button>
-	</div>
-</div>
-
 <style>
 	:root {
 		--face-size: 300px;
@@ -685,14 +652,6 @@
 		width: var(--face-size);
 		height: var(--face-size);
 		overflow: visible;
-	}
-
-	/* buttons */
-	.test-btns {
-		display: none;
-	}
-	.show-test-btns {
-		display: block;
 	}
 
 	/* expression */
