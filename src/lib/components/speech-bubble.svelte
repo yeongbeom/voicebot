@@ -11,7 +11,7 @@
 		xmlns="http://www.w3.org/2000/svg"
 	>
 		<path
-			id="bubble--path"
+			id="bubble__path"
 			d="M281.527 177.738L391.62 102.15L409.853 140.772L281.527 177.738Z"
 			fill="#2B2B2B"
 		/>
@@ -19,7 +19,13 @@
 </div>
 
 <style>
+	:root {
+		--face-size: 300px;
+	}
+
 	.bubble {
-		position: absolute;
+		width: var(--face-size);
+		height: var(--face-size);
+		overflow: visible;
 	}
 </style>
