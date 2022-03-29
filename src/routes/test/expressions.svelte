@@ -1,10 +1,8 @@
 <script lang="ts">
 	import BasicExpression from '$lib/components/expressions/basic.svelte';
-	import SpeechBubble from '$lib/components/speech-bubble.svelte';
 	import Button from '$lib/shared/button.svelte';
 	import { onMount, onDestroy } from 'svelte';
 
-	let showTestBtns = false;
 	let expression = 'neutral';
 	let talk = false;
 
@@ -17,27 +15,16 @@
 	};
 
 	onMount(() => {
-		console.log('test-expressions.svelte mounted');
-		showTestBtns = true;
+		console.log('expressions.svelte mounted');
 	});
 	onDestroy(() => {
-		console.log('test-expressions.svelte destroyed');
+		console.log('expressions.svelte destroyed');
 	});
 </script>
 
-<div>
-	<h1>test</h1>
-	<h1>test</h1>
-</div>
+<BasicExpression {expression} {talk} />
 
-<div class="expression">
-	<BasicExpression {expression} {talk} />
-	<div class="bubble">
-		<SpeechBubble />
-	</div>
-</div>
-
-<div class="test-btns" class:show-test-btns={showTestBtns}>
+<div class="test-btns">
 	<!-- control emotional expressions -->
 	<div>
 		<Button on:click={changeExpression} type="classic" flat={true}>neutral</Button>
@@ -50,31 +37,13 @@
 		<Button on:click={changeExpression} type="classic" flat={true}>worry</Button>
 		<Button on:click={changeExpression} type="classic" flat={true}>contempt</Button>
 	</div>
-	<!-- control status-->
+	<!-- control status -->
 	<div>
 		<Button on:click={changeExpression} type="classic" flat={true}>wait</Button>
 		<Button on:click={changeExpression} type="classic" flat={true}>listen</Button>
 	</div>
+	<!-- control situation -->
 	<div>
 		<Button on:click={toggleTalkStatus} type="primary" flat={true}>talk</Button>
 	</div>
 </div>
-
-<style>
-	/* buttons */
-	.test-btns {
-		display: none;
-	}
-	.show-test-btns {
-		display: block;
-	}
-
-	.expression {
-		position: relative;
-	}
-	.bubble {
-		position: absolute;
-		top: 0;
-		left: 0;
-	}
-</style>
