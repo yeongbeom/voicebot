@@ -423,7 +423,7 @@
 	});
 </script>
 
-<div class="test-btn" class:show>
+<div class="test-btns" class:show>
 	<!-- control emotional expressions -->
 	<div>
 		<Button on:click={changeExpression} type="classic" flat={true}>neutral</Button>
@@ -446,10 +446,10 @@
 	</div>
 </div>
 
-<div class="expression">
+<div class="expression-container">
 	<svg
 		class={emotion}
-		id="_face"
+		id="expression"
 		width="250"
 		height="250"
 		viewBox="0 0 250 250"
@@ -516,13 +516,6 @@
 			style="display: none"
 			d="M130.617 181.553C134.43 184.427 130.687 186.255 126.662 183.686C124.299 182.179 121.606 181.024 118.666 180.702C115.727 180.38 112.847 180.924 110.215 181.884C105.728 183.52 102.47 180.925 106.815 178.945C110.317 177.349 114.574 176.637 119.058 177.128C123.542 177.62 127.543 179.236 130.617 181.553Z"
 			fill="black"
-		/>
-
-		<!-- effect -->
-		<path
-			id="_bubble"
-			d="M281.527 177.738L391.62 102.15L409.853 140.772L281.527 177.738Z"
-			fill="#2B2B2B"
 		/>
 
 		<!-- status: listen -->
@@ -685,14 +678,18 @@
 </div>
 
 <style>
-	#_face {
-		width: 300px;
-		height: 300px;
+	:root {
+		--face-size: 300px;
+	}
+
+	#expression {
+		width: var(--face-size);
+		height: var(--face-size);
 		overflow: visible;
 	}
 
 	/* buttons */
-	.test-btn {
+	.test-btns {
 		display: none;
 	}
 	.show {
