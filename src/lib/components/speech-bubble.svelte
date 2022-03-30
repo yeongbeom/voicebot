@@ -70,14 +70,15 @@
 
 	.msgBox {
 		width: 90%;
-		/* position: absolute; */
+		position: absolute;
+		overflow-wrap: break-word;
 		top: var(--top);
 		left: var(--left);
 		height: max-content;
 		max-height: 50%;
 		border-radius: 10px;
 		font-weight: bolder;
-		/* overflow: auto; */
+		overflow: scroll;
 		font-size: 25px;
 		padding: 40px;
 		color: var(--text-color);
