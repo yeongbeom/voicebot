@@ -1,13 +1,13 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 
+	export let message = '연결 중...<br />잠시만 기다려주세요';
 	export let expressionSize = '300px';
 	export let bubbleColor = '#2B2B2B';
 	export let textColor = '#FFFFFF';
 	export let mediaQueryString = 'screen and (max-width: 767px), (orientation: portrait)';
 
 	let path = 'M281.527 177.738L391.62 102.15L409.853 140.772L281.527 177.738Z';
-	// const bubble = document.querySelector('.bubble');
 
 	onMount(() => {
 		const screenSize = window.matchMedia(mediaQueryString);
@@ -24,12 +24,6 @@
 	});
 </script>
 
-<div class="msgZone">
-	<div class="msgBox" id="msgBox" style="--bubble-color: {bubbleColor}; --text-color: {textColor}">
-		연결 중...<br />잠시만 기다려주세요
-	</div>
-</div>
-
 <div class="bubble-container">
 	<svg
 		class="bubble"
@@ -41,6 +35,12 @@
 	>
 		<path id="bubble__path" d={path} fill={bubbleColor} />
 	</svg>
+</div>
+
+<div class="msgZone">
+	<div class="msgBox" style="--bubble-color: {bubbleColor}; --text-color: {textColor}">
+		{@html message}
+	</div>
 </div>
 
 <style>

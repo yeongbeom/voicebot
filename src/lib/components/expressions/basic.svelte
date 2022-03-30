@@ -635,6 +635,11 @@
 	.expression {
 		overflow: visible;
 	}
+	/* init */
+	.option_listen,
+	.option_wait {
+		display: none;
+	}
 
 	/* expression */
 	.r_eye,
