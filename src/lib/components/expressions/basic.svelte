@@ -1,12 +1,10 @@
 <script lang="ts">
 	import anime from 'animejs/lib/anime.es';
 	import { browser } from '$app/env';
-	import { onMount } from 'svelte';
 
 	export let expression: string;
 	export let talk: boolean;
 	export let expressionSize = 300;
-	export let mediaQueryString = 'screen and (max-width: 767px), (orientation: portrait)';
 
 	let exprSize = `${expressionSize}px`;
 
@@ -402,19 +400,6 @@
 		expression;
 		browser && morph(expressionPaths[expression]);
 	}
-	onMount(() => {
-		const screenSize = window.matchMedia(mediaQueryString);
-		const adjustExpressionSize = (screenSize) => {
-			if (screenSize.matches) {
-				exprSize = `${expressionSize * 0.7}px`;
-			} else {
-				exprSize = `${expressionSize}px`;
-			}
-		};
-		screenSize.addEventListener('change', () => {
-			adjustExpressionSize(screenSize);
-		});
-	});
 </script>
 
 <div class="expression-container">
