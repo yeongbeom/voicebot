@@ -1,5 +1,5 @@
 <script lang="ts">
-	import '../styles/global.css';
+	import '../../styles/global.css';
 </script>
 
 <svelte:head>
@@ -10,9 +10,9 @@
 	<slot />
 </main>
 
-<!-- <footer>
-	<p>Copyright 2022</p>
-</footer> -->
+<footer>
+	<!-- <p>Copyright 2022</p> -->
+</footer>
 
 <style>
 	footer {

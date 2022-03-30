@@ -3,6 +3,8 @@
 
 <div>
 	<a href="/test/expressions">Test expressions</a>
+</div>
+<div>
 	<a href="/test/bubble">Test bubble</a>
 </div>
 
