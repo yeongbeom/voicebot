@@ -1,10 +1,14 @@
 <script lang="ts">
 	import anime from 'animejs/lib/anime.es';
 	import { browser } from '$app/env';
+	import { onMount } from 'svelte';
 
 	export let expression: string;
 	export let talk: boolean;
-	export let expressionSize = '300px';
+	export let expressionSize = 300;
+	export let mediaQueryString = 'screen and (max-width: 767px), (orientation: portrait)';
+
+	let exprSize = `${expressionSize}px`;
 
 	const expressionPaths = {
 		neutral: {
@@ -398,14 +402,27 @@
 		expression;
 		browser && morph(expressionPaths[expression]);
 	}
+	onMount(() => {
+		const screenSize = window.matchMedia(mediaQueryString);
+		const adjustExpressionSize = (screenSize) => {
+			if (screenSize.matches) {
+				exprSize = `${expressionSize * 0.7}px`;
+			} else {
+				exprSize = `${expressionSize}px`;
+			}
+		};
+		screenSize.addEventListener('change', () => {
+			adjustExpressionSize(screenSize);
+		});
+	});
 </script>
 
 <div class="expression-container">
 	<svg
 		class="expression"
 		id={expression}
-		width={expressionSize}
-		height={expressionSize}
+		width={exprSize}
+		height={exprSize}
 		viewBox="0 0 250 250"
 		fill="none"
 		xmlns="http://www.w3.org/2000/svg"

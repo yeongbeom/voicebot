@@ -24,20 +24,19 @@
 	});
 </script>
 
-<div class="bubble-container">
-	<svg
-		class="bubble"
-		width={expressionSize}
-		height={expressionSize}
-		viewBox="0 0 250 250"
-		fill="none"
-		xmlns="http://www.w3.org/2000/svg"
-	>
-		<path id="bubble__path" d={path} fill={bubbleColor} />
-	</svg>
-</div>
-
 <div class="msgZone">
+	<div class="bubble-container">
+		<svg
+			class="bubble"
+			width={expressionSize}
+			height={expressionSize}
+			viewBox="0 0 250 250"
+			fill="none"
+			xmlns="http://www.w3.org/2000/svg"
+		>
+			<path id="bubble__path" d={path} fill={bubbleColor} />
+		</svg>
+	</div>
 	<div class="msgBox" style="--bubble-color: {bubbleColor}; --text-color: {textColor}">
 		{@html message}
 	</div>
@@ -50,22 +49,25 @@
 
 	.msgZone {
 		width: 50%;
-		float: left;
-		flex-direction: column;
 		position: relative;
-		overflow: visible;
+		/* float: left; */
+		/* flex-direction: column; */
+		/* overflow: visible; */
 	}
 
 	.msgBox {
 		width: 90%;
+		position: absolute;
+		left: 450px;
+		top: 60px;
 		height: max-content;
 		max-height: 50%;
 		border-radius: 10px;
-		color: var(--text-color);
 		font-weight: bolder;
 		font-size: 25px;
 		padding: 40px;
-		overflow: auto;
+		/* overflow: auto; */
+		color: var(--text-color);
 		background-color: var(--bubble-color);
 	}
 
