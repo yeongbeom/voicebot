@@ -63,22 +63,21 @@
 		height: 100%;
 		width: 50%;
 		position: relative;
-		display: flex;
-		flex-direction: column;
+		/* flex-direction: column; */
 		/* float: left; */
 		/* overflow: visible; */
 	}
 
 	.msgBox {
 		width: 90%;
-		position: absolute;
+		/* position: absolute; */
 		top: var(--top);
 		left: var(--left);
 		height: max-content;
 		max-height: 50%;
 		border-radius: 10px;
 		font-weight: bolder;
-		overflow: auto;
+		/* overflow: auto; */
 		font-size: 25px;
 		padding: 40px;
 		color: var(--text-color);
