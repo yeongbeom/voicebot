@@ -4,6 +4,7 @@
 
 	export let expression: string;
 	export let talk: boolean;
+	export let expressionSize = '300px';
 
 	const expressionPaths = {
 		neutral: {
@@ -403,8 +404,8 @@
 	<svg
 		class="expression"
 		id={expression}
-		width="250"
-		height="250"
+		width={expressionSize}
+		height={expressionSize}
 		viewBox="0 0 250 250"
 		fill="none"
 		xmlns="http://www.w3.org/2000/svg"
@@ -631,13 +632,7 @@
 </div>
 
 <style>
-	:root {
-		--face-size: 300px;
-	}
-
 	.expression {
-		width: var(--face-size);
-		height: var(--face-size);
 		overflow: visible;
 	}
 
