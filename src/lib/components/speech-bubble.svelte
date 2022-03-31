@@ -1,8 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 
-	export let message =
-		'연결 중...<br />잠시만 기다려주세요@@@@@@<br />@@@<br /><br />@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@';
+	export let message = '연결 중...<br />잠시만 기다려주세요';
 	export let expressionSize = 300;
 	export let bubbleColor = '#2B2B2B';
 	export let textColor = '#FFFFFF';
@@ -27,48 +26,43 @@
 				left = '430px';
 			}
 		};
+		putBubble(screenSize);
 		screenSize.addEventListener('change', () => {
 			putBubble(screenSize);
 		});
 	});
 </script>
 
-<div class="msgZone">
-	<div class="bubble-container">
-		<svg
-			class="bubble"
-			width={exprSize}
-			height={exprSize}
-			viewBox="0 0 250 250"
-			fill="none"
-			xmlns="http://www.w3.org/2000/svg"
-		>
-			<path id="bubble__path" d={path} fill={bubbleColor} />
-		</svg>
-	</div>
+<div class="msg-section">
+	<svg
+		class="tip"
+		width={exprSize}
+		height={exprSize}
+		viewBox="0 0 250 250"
+		fill="none"
+		xmlns="http://www.w3.org/2000/svg"
+	>
+		<path id="bubble__path" d={path} fill={bubbleColor} />
+	</svg>
 	<div
-		class="msgBox"
-		style="--top: {top}; --left: {left}; --bubble-color: {bubbleColor}; --text-color: {textColor}"
+		class="bubble"
+		style="--top: {top}; --left: {left}; --tip-color: {bubbleColor}; --text-color: {textColor}"
 	>
 		{@html message}
 	</div>
 </div>
 
 <style>
-	.bubble {
+	.tip {
 		overflow: visible;
 	}
 
-	.msgZone {
-		height: 100%;
+	.msg-section {
 		width: 50%;
 		position: relative;
-		/* flex-direction: column; */
-		/* float: left; */
-		/* overflow: visible; */
 	}
 
-	.msgBox {
+	.bubble {
 		width: 90%;
 		position: absolute;
 		overflow-wrap: break-word;
@@ -82,10 +76,10 @@
 		font-size: 25px;
 		padding: 40px;
 		color: var(--text-color);
-		background-color: var(--bubble-color);
+		background-color: var(--tip-color);
 	}
 
-	.msgBox::-webkit-scrollbar {
+	.bubble::-webkit-scrollbar {
 		display: none;
 	}
 </style>
