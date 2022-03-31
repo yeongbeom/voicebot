@@ -1,7 +1,7 @@
 <script lang="ts">
 	import anime from 'animejs/lib/anime.es';
 	import { browser } from '$app/env';
-	import { currentExpression, currentStatus, status } from '$lib/stores/bot';
+	import { currentExpression, isTalking } from '$lib/stores/bot';
 
 	export let expressionSize = 300;
 
@@ -396,19 +396,8 @@
 	};
 
 	$: {
-		console.log($currentExpression, $currentStatus);
 		currentExpression;
 		browser && morph(expressionPaths[$currentExpression]);
-	}
-
-	$: {
-		console.log($currentExpression, $currentStatus);
-		currentStatus;
-		if ($currentStatus === $status.listen || $currentStatus === $status.think) {
-			browser && morph(expressionPaths[$currentStatus]);
-		} else {
-			browser && morph(expressionPaths[$currentExpression]);
-		}
 	}
 </script>
 
@@ -436,7 +425,7 @@
 		/>
 		<path
 			class="mouse"
-			class:talk={$currentStatus === $status.talk}
+			class:talk={$isTalking}
 			id="mouse"
 			d="M141 184.582C141 192.942 133.837 194 125 194C116.163 194 109 192.942 109 184.582C109 176.223 116.163 178.205 125 178.205C133.837 178.205 141 176.223 141 184.582Z"
 			fill="#FF3D3D"

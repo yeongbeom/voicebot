@@ -1,25 +1,16 @@
 <script lang="ts">
 	import Button from '$lib/shared/button.svelte';
-	import { currentExpression, currentStatus, status } from '$lib/stores/bot';
-
-	let isTalking = false;
+	import { currentExpression, isTalking } from '$lib/stores/bot';
 
 	const changeExpression = (e) => {
 		$currentExpression = e.target.innerText.toLowerCase();
-		$currentStatus = $status.think;
 	};
-
-	const changeStatus = (e) => {
-		$currentStatus = e.target.innerText.toLowerCase();
-	};
-
 	const toggleTalkStatus = () => {
-		isTalking = !isTalking;
-		if (isTalking) $currentStatus = $status.talk;
+		$isTalking = !$isTalking;
 	};
 </script>
 
-<div class="test-btns">
+<div class="expressions">
 	<!-- control emotional expressions -->
 	<div>
 		<Button on:click={changeExpression} type="classic" flat={true}>neutral</Button>
@@ -32,13 +23,15 @@
 		<Button on:click={changeExpression} type="classic" flat={true}>worry</Button>
 		<Button on:click={changeExpression} type="classic" flat={true}>contempt</Button>
 	</div>
+	<!-- control other expressions -->
+	<div>
+		<Button on:click={changeExpression} type="classic" flat={true}>think</Button>
+		<Button on:click={changeExpression} type="classic" flat={true}>listen</Button>
+	</div>
 	<!-- control status -->
 	<div>
-		<Button on:click={changeStatus} type="classic" flat={true}>think</Button>
-		<Button on:click={changeStatus} type="classic" flat={true}>listen</Button>
-	</div>
-	<!-- control situation -->
-	<div>
-		<Button on:click={toggleTalkStatus} type="primary" flat={true}>talk</Button>
+		<Button on:click={toggleTalkStatus} type="primary" flat={true}>talking</Button>
 	</div>
 </div>
+
+<div class="status">status</div>

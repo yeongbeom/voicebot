@@ -2,9 +2,11 @@ import { readable, writable } from 'svelte/store';
 
 export const currentExpression = writable('neutral');
 
+export const isTalking = writable(false);
+
 export const currentStatus = writable('init');
 
-export const emotion = readable({
+export const expression = readable({
 	neutral: 'neutral',
 	happiness: 'happiness',
 	disgust: 'disgust',
@@ -13,15 +15,17 @@ export const emotion = readable({
 	sadness: 'sadness',
 	fear: 'fear',
 	worry: 'worry',
-	contempt: 'contempt'
+	contempt: 'contempt',
+	listen: 'listen',
+	think: 'think'
 });
 
 export const status = readable({
 	init: 'init',
 	idle: 'idle',
-	listen: 'listen',
-	think: 'think',
-	talk: 'talk'
+	listening: 'listening',
+	thinking: 'thinking',
+	talking: 'talking'
 });
 
 // switch ($currentStatus) {

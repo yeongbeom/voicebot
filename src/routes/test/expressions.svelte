@@ -1,6 +1,6 @@
 <script lang="ts">
 	import BasicExpression from '$lib/components/expressions/basic.svelte';
-	import TestBot from '$lib/components/test-bot.svelte';
+	import TestBtns from '$lib/components/test-btns.svelte';
 	import { onMount, onDestroy } from 'svelte';
 
 	onMount(() => {
@@ -12,4 +12,4 @@
 </script>
 
 <BasicExpression />
-<TestBot />
+<TestBtns />
