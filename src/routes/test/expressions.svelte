@@ -1,17 +1,22 @@
 <script lang="ts">
 	import BasicExpression from '$lib/components/expressions/basic.svelte';
 	import Button from '$lib/shared/button.svelte';
+	import { currentExpression, currentStatus, status } from '$lib/stores/bot';
 	import { onMount, onDestroy } from 'svelte';
 
-	let expression = 'neutral';
 	let isTalking = false;
 
 	const changeExpression = (e) => {
-		expression = e.target.innerText.toLowerCase();
+		$currentExpression = e.target.innerText.toLowerCase();
 	};
 
 	const toggleTalkStatus = () => {
 		isTalking = !isTalking;
+		if (isTalking) {
+			$currentStatus = $status.talk;
+		} else {
+			$currentStatus = $status.idle;
+		}
 	};
 
 	onMount(() => {
@@ -22,7 +27,7 @@
 	});
 </script>
 
-<BasicExpression {expression} {isTalking} />
+<BasicExpression />
 
 <div class="test-btns">
 	<!-- control emotional expressions -->

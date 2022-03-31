@@ -1,14 +1,9 @@
 <script lang="ts">
 	import Button from '$lib/shared/button.svelte';
-	import { createEventDispatcher } from 'svelte';
-
-	const dispatch = createEventDispatcher();
-
-	let expression = 'neutral';
-	let talk = false;
+	import { currentExpression } from '$lib/stores/bot';
 
 	const changeExpression = (e) => {
-		expression = e.target.innerText.toLowerCase();
+		$currentExpression = e.target.innerText.toLowerCase();
 	};
 
 	const toggleTalkStatus = () => {

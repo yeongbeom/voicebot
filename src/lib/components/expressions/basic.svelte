@@ -1,9 +1,8 @@
 <script lang="ts">
 	import anime from 'animejs/lib/anime.es';
 	import { browser } from '$app/env';
+	import { currentExpression, currentStatus, status } from '$lib/stores/bot';
 
-	export let expression: string;
-	export let isTalking: boolean;
 	export let expressionSize = 300;
 
 	let exprSize = `${expressionSize}px`;
@@ -280,7 +279,7 @@
 		// TODO: insert mouse_color property to the paths
 		let mouse_color = '';
 
-		if (expressionPath.expression == 'anger') {
+		if (expressionPath.expression === 'anger') {
 			mouse_color = '#000';
 		} else {
 			mouse_color = '#FF3D3D';
@@ -304,13 +303,13 @@
 			})
 			.add({
 				begin: function () {
-					if (expressionPath.expression != 'sadness') {
+					if (expressionPath.expression !== 'sadness') {
 						(document.querySelector('.option_sad1') as HTMLElement).style.display = 'none';
 						(document.querySelector('.option_sad2') as HTMLElement).style.display = 'none';
 					}
 				},
 				complete: function () {
-					if (expressionPath.expression == 'sadness') {
+					if (expressionPath.expression === 'sadness') {
 						(document.querySelector('.option_sad1') as HTMLElement).style.display = 'block';
 						(document.querySelector('.option_sad2') as HTMLElement).style.display = 'block';
 					}
@@ -323,13 +322,13 @@
 			})
 			.add({
 				begin: function () {
-					if (expressionPath.expression != 'fear') {
+					if (expressionPath.expression !== 'fear') {
 						(document.querySelector('.option_fear1') as HTMLElement).style.display = 'none';
 						(document.querySelector('.option_fear2') as HTMLElement).style.display = 'none';
 					}
 				},
 				complete: function () {
-					if (expressionPath.expression == 'fear') {
+					if (expressionPath.expression === 'fear') {
 						(document.querySelector('.option_fear1') as HTMLElement).style.display = 'block';
 						(document.querySelector('.option_fear2') as HTMLElement).style.display = 'block';
 					}
@@ -342,12 +341,12 @@
 			})
 			.add({
 				begin: function () {
-					if (expressionPath.expression != 'disgust') {
+					if (expressionPath.expression !== 'disgust') {
 						(document.querySelector('.option_disgust') as HTMLElement).style.display = 'none';
 					}
 				},
 				complete: function () {
-					if (expressionPath.expression == 'disgust') {
+					if (expressionPath.expression === 'disgust') {
 						(document.querySelector('.option_disgust') as HTMLElement).style.display = 'block';
 					}
 				}
@@ -359,14 +358,14 @@
 			})
 			.add({
 				begin: function () {
-					if (expressionPath.expression != 'think') {
+					if (expressionPath.expression !== 'think') {
 						document.querySelectorAll('.option_think').forEach((_think) => {
 							(_think as HTMLElement).style.display = 'none';
 						});
 					}
 				},
 				complete: function () {
-					if (expressionPath.expression == 'think') {
+					if (expressionPath.expression === 'think') {
 						document.querySelectorAll('.option_think').forEach((_think) => {
 							(_think as HTMLElement).style.display = 'block';
 						});
@@ -380,14 +379,14 @@
 			})
 			.add({
 				begin: function () {
-					if (expressionPath.expression != 'listen') {
+					if (expressionPath.expression !== 'listen') {
 						document.querySelectorAll('.option_listen').forEach((_listen) => {
 							(_listen as HTMLElement).style.display = 'none';
 						});
 					}
 				},
 				complete: function () {
-					if (expressionPath.expression == 'listen') {
+					if (expressionPath.expression === 'listen') {
 						document.querySelectorAll('.option_listen').forEach((_listen) => {
 							(_listen as HTMLElement).style.display = 'block';
 						});
@@ -397,15 +396,15 @@
 	};
 
 	$: {
-		expression;
-		browser && morph(expressionPaths[expression]);
+		currentExpression;
+		browser && morph(expressionPaths[$currentExpression]);
 	}
 </script>
 
 <div class="expression-container">
 	<svg
 		class="expression"
-		id={expression}
+		id={$currentExpression}
 		width={exprSize}
 		height={exprSize}
 		viewBox="0 0 250 250"
@@ -426,7 +425,7 @@
 		/>
 		<path
 			class="mouse"
-			class:talk={isTalking}
+			class:talk={$currentStatus === $status.talk}
 			id="mouse"
 			d="M141 184.582C141 192.942 133.837 194 125 194C116.163 194 109 192.942 109 184.582C109 176.223 116.163 178.205 125 178.205C133.837 178.205 141 176.223 141 184.582Z"
 			fill="#FF3D3D"
