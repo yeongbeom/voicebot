@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { currentStatus, status } from '$lib/stores/status';
 	import { onMount } from 'svelte';
 
 	export let message = '연결 중...<br />잠시만 기다려주세요';
@@ -12,6 +13,62 @@
 	let left = '0px';
 
 	let path = 'M58.6451 254.298L29.4936 311.56L7.43998 293.115L58.6451 254.298Z';
+
+	switch ($currentStatus) {
+		case $status.init: {
+			console.log(0);
+			break;
+		}
+		case $status.idle: {
+			console.log(1);
+			break;
+		}
+		case $status.listen: {
+			console.log(2);
+			break;
+		}
+		case $status.think: {
+			console.log(3);
+			break;
+		}
+		case $status.speak: {
+			console.log(4);
+			break;
+		}
+		default: {
+			console.log(5);
+			break;
+		}
+	}
+	setInterval(() => {
+		$currentStatus = $status.listen;
+		switch ($currentStatus) {
+			case $status.init: {
+				console.log(0);
+				break;
+			}
+			case $status.idle: {
+				console.log(1);
+				break;
+			}
+			case $status.listen: {
+				console.log(2);
+				break;
+			}
+			case $status.think: {
+				console.log(3);
+				break;
+			}
+			case $status.speak: {
+				console.log(4);
+				break;
+			}
+			default: {
+				console.log(5);
+				break;
+			}
+		}
+	}, 3000);
 
 	onMount(() => {
 		const screenSize = window.matchMedia(mediaQueryString);
