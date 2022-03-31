@@ -1,28 +1,20 @@
 <script lang="ts">
-	import BasicExpression from '$lib/components/expressions/basic.svelte';
 	import Button from '$lib/shared/button.svelte';
-	import { onMount, onDestroy } from 'svelte';
+	import { createEventDispatcher } from 'svelte';
+
+	const dispatch = createEventDispatcher();
 
 	let expression = 'neutral';
-	let isTalking = false;
+	let talk = false;
 
 	const changeExpression = (e) => {
 		expression = e.target.innerText.toLowerCase();
 	};
 
 	const toggleTalkStatus = () => {
-		isTalking = !isTalking;
+		talk = !talk;
 	};
-
-	onMount(() => {
-		console.log('expressions.svelte mounted');
-	});
-	onDestroy(() => {
-		console.log('expressions.svelte destroyed');
-	});
 </script>
-
-<BasicExpression {expression} {isTalking} />
 
 <div class="test-btns">
 	<!-- control emotional expressions -->

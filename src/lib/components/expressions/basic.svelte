@@ -3,7 +3,7 @@
 	import { browser } from '$app/env';
 
 	export let expression: string;
-	export let talk: boolean;
+	export let isTalking: boolean;
 	export let expressionSize = 300;
 
 	let exprSize = `${expressionSize}px`;
@@ -194,8 +194,8 @@
 			option_fear2: ''
 		},
 
-		wait: {
-			expression: 'wait',
+		think: {
+			expression: 'think',
 			face: '#FFE600',
 			l_eye:
 				'M67.5 96C67.5 108.703 65.7025 119 53 119C40.2975 119 38 108.703 38 96C38 83.2975 40.2975 73 53 73C65.7025 73 67.5 83.2975 67.5 96Z',
@@ -359,16 +359,16 @@
 			})
 			.add({
 				begin: function () {
-					if (expressionPath.expression != 'wait') {
-						document.querySelectorAll('.option_wait').forEach((_wait) => {
-							(_wait as HTMLElement).style.display = 'none';
+					if (expressionPath.expression != 'think') {
+						document.querySelectorAll('.option_think').forEach((_think) => {
+							(_think as HTMLElement).style.display = 'none';
 						});
 					}
 				},
 				complete: function () {
-					if (expressionPath.expression == 'wait') {
-						document.querySelectorAll('.option_wait').forEach((_wait) => {
-							(_wait as HTMLElement).style.display = 'block';
+					if (expressionPath.expression == 'think') {
+						document.querySelectorAll('.option_think').forEach((_think) => {
+							(_think as HTMLElement).style.display = 'block';
 						});
 					}
 				}
@@ -426,7 +426,7 @@
 		/>
 		<path
 			class="mouse"
-			class:talk
+			class:talk={isTalking}
 			id="mouse"
 			d="M141 184.582C141 192.942 133.837 194 125 194C116.163 194 109 192.942 109 184.582C109 176.223 116.163 178.205 125 178.205C133.837 178.205 141 176.223 141 184.582Z"
 			fill="#FF3D3D"
@@ -523,17 +523,17 @@
 			mask="url(#path-10-inside-3)"
 		/>
 
-		<!-- status: wait -->
+		<!-- status: think -->
 		<circle
-			class="option_wait"
-			id="wait_light"
+			class="option_think"
+			id="think_light"
 			cx="224.424"
 			cy="49.424"
 			r="35.424"
 			fill="#2EC0FF"
 		/>
 		<ellipse
-			class="option_wait"
+			class="option_think"
 			cx="224.424"
 			cy="97.6863"
 			rx="16.4044"
@@ -541,7 +541,7 @@
 			fill="#454545"
 		/>
 		<line
-			class="option_wait"
+			class="option_think"
 			x1="234.5"
 			y1="37"
 			x2="234.5"
@@ -550,7 +550,7 @@
 			stroke-width="3"
 		/>
 		<line
-			class="option_wait"
+			class="option_think"
 			x1="215.5"
 			y1="37"
 			x2="215.5"
@@ -559,7 +559,7 @@
 			stroke-width="3"
 		/>
 		<rect
-			class="option_wait"
+			class="option_think"
 			x="208.02"
 			y="80.5686"
 			width="32.8088"
@@ -567,7 +567,7 @@
 			fill="#C4C4C4"
 		/>
 		<line
-			class="option_wait"
+			class="option_think"
 			x1="221.333"
 			y1="84.299"
 			x2="240.829"
@@ -576,7 +576,7 @@
 			stroke-width="3"
 		/>
 		<line
-			class="option_wait"
+			class="option_think"
 			x1="221.333"
 			y1="89.5294"
 			x2="240.829"
@@ -585,7 +585,7 @@
 			stroke-width="3"
 		/>
 		<line
-			class="option_wait"
+			class="option_think"
 			x1="208.02"
 			y1="96.6618"
 			x2="227.515"
@@ -594,7 +594,7 @@
 			stroke-width="3"
 		/>
 		<line
-			class="option_wait"
+			class="option_think"
 			x1="209"
 			y1="43.5"
 			x2="241"
@@ -602,28 +602,28 @@
 			stroke="black"
 			stroke-width="3"
 		/>
-		<mask class="option_wait" id="path-16-inside-1" fill="white">
+		<mask class="option_think" id="path-16-inside-1" fill="white">
 			<path
-				class="option_wait"
+				class="option_think"
 				d="M240.5 45C241.983 45 243.433 44.5601 244.667 43.736C245.9 42.9119 246.861 41.7406 247.429 40.3701C247.997 38.9997 248.145 37.4917 247.856 36.0368C247.567 34.582 246.852 33.2456 245.803 32.1967C244.754 31.1478 243.418 30.4335 241.963 30.1441C240.508 29.8547 239 30.0032 237.63 30.5709C236.259 31.1386 235.088 32.0999 234.264 33.3332C233.44 34.5666 233 36.0166 233 37.5L236.019 37.5C236.019 36.6137 236.281 35.7472 236.774 35.0103C237.266 34.2733 237.966 33.6989 238.785 33.3597C239.604 33.0205 240.505 32.9318 241.374 33.1047C242.244 33.2776 243.042 33.7044 243.669 34.3312C244.296 34.9579 244.722 35.7564 244.895 36.6257C245.068 37.495 244.979 38.3961 244.64 39.215C244.301 40.0338 243.727 40.7337 242.99 41.2261C242.253 41.7186 241.386 41.9814 240.5 41.9814V45Z"
 			/>
 		</mask>
 		<path
-			class="option_wait"
+			class="option_think"
 			d="M240.5 45C241.983 45 243.433 44.5601 244.667 43.736C245.9 42.9119 246.861 41.7406 247.429 40.3701C247.997 38.9997 248.145 37.4917 247.856 36.0368C247.567 34.582 246.852 33.2456 245.803 32.1967C244.754 31.1478 243.418 30.4335 241.963 30.1441C240.508 29.8547 239 30.0032 237.63 30.5709C236.259 31.1386 235.088 32.0999 234.264 33.3332C233.44 34.5666 233 36.0166 233 37.5L236.019 37.5C236.019 36.6137 236.281 35.7472 236.774 35.0103C237.266 34.2733 237.966 33.6989 238.785 33.3597C239.604 33.0205 240.505 32.9318 241.374 33.1047C242.244 33.2776 243.042 33.7044 243.669 34.3312C244.296 34.9579 244.722 35.7564 244.895 36.6257C245.068 37.495 244.979 38.3961 244.64 39.215C244.301 40.0338 243.727 40.7337 242.99 41.2261C242.253 41.7186 241.386 41.9814 240.5 41.9814V45Z"
 			fill="#C4C4C4"
 			stroke="black"
 			stroke-width="6"
 			mask="url(#path-16-inside-1)"
 		/>
-		<mask class="option_wait" id="path-17-inside-2" fill="white">
+		<mask class="option_think" id="path-17-inside-2" fill="white">
 			<path
-				class="option_wait"
+				class="option_think"
 				d="M209.5 45C208.017 45 206.567 44.5601 205.333 43.736C204.1 42.9119 203.139 41.7406 202.571 40.3701C202.003 38.9997 201.855 37.4917 202.144 36.0368C202.433 34.582 203.148 33.2456 204.197 32.1967C205.246 31.1478 206.582 30.4335 208.037 30.1441C209.492 29.8547 211 30.0032 212.37 30.5709C213.741 31.1386 214.912 32.0999 215.736 33.3332C216.56 34.5666 217 36.0166 217 37.5L214.017 37.5C214.017 36.6066 213.752 35.7333 213.256 34.9904C212.759 34.2476 212.054 33.6686 211.229 33.3268C210.403 32.9849 209.495 32.8954 208.619 33.0697C207.743 33.244 206.938 33.6742 206.306 34.3059C205.674 34.9377 205.244 35.7425 205.07 36.6188C204.895 37.495 204.985 38.4032 205.327 39.2286C205.669 40.054 206.248 40.7595 206.99 41.2558C207.733 41.7522 208.607 42.0171 209.5 42.0171V45Z"
 			/>
 		</mask>
 		<path
-			class="option_wait"
+			class="option_think"
 			d="M209.5 45C208.017 45 206.567 44.5601 205.333 43.736C204.1 42.9119 203.139 41.7406 202.571 40.3701C202.003 38.9997 201.855 37.4917 202.144 36.0368C202.433 34.582 203.148 33.2456 204.197 32.1967C205.246 31.1478 206.582 30.4335 208.037 30.1441C209.492 29.8547 211 30.0032 212.37 30.5709C213.741 31.1386 214.912 32.0999 215.736 33.3332C216.56 34.5666 217 36.0166 217 37.5L214.017 37.5C214.017 36.6066 213.752 35.7333 213.256 34.9904C212.759 34.2476 212.054 33.6686 211.229 33.3268C210.403 32.9849 209.495 32.8954 208.619 33.0697C207.743 33.244 206.938 33.6742 206.306 34.3059C205.674 34.9377 205.244 35.7425 205.07 36.6188C204.895 37.495 204.985 38.4032 205.327 39.2286C205.669 40.054 206.248 40.7595 206.99 41.2558C207.733 41.7522 208.607 42.0171 209.5 42.0171V45Z"
 			fill="#C4C4C4"
 			stroke="black"
@@ -639,7 +639,7 @@
 	}
 	/* init */
 	.option_listen,
-	.option_wait {
+	.option_think {
 		display: none;
 	}
 
@@ -817,7 +817,7 @@
 		}
 	}
 
-	#wait_light {
+	#think_light {
 		animation: colorChange 3s infinite;
 	}
 
