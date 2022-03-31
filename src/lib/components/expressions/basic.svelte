@@ -396,8 +396,19 @@
 	};
 
 	$: {
+		console.log($currentExpression, $currentStatus);
 		currentExpression;
 		browser && morph(expressionPaths[$currentExpression]);
+	}
+
+	$: {
+		console.log($currentExpression, $currentStatus);
+		currentStatus;
+		if ($currentStatus === $status.listen || $currentStatus === $status.think) {
+			browser && morph(expressionPaths[$currentStatus]);
+		} else {
+			browser && morph(expressionPaths[$currentExpression]);
+		}
 	}
 </script>
 

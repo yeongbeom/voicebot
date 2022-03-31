@@ -1,13 +1,21 @@
 <script lang="ts">
 	import Button from '$lib/shared/button.svelte';
-	import { currentExpression } from '$lib/stores/bot';
+	import { currentExpression, currentStatus, status } from '$lib/stores/bot';
+
+	let isTalking = false;
 
 	const changeExpression = (e) => {
 		$currentExpression = e.target.innerText.toLowerCase();
+		$currentStatus = $status.think;
+	};
+
+	const changeStatus = (e) => {
+		$currentStatus = e.target.innerText.toLowerCase();
 	};
 
 	const toggleTalkStatus = () => {
-		talk = !talk;
+		isTalking = !isTalking;
+		if (isTalking) $currentStatus = $status.talk;
 	};
 </script>
 
@@ -26,8 +34,8 @@
 	</div>
 	<!-- control status -->
 	<div>
-		<Button on:click={changeExpression} type="classic" flat={true}>think</Button>
-		<Button on:click={changeExpression} type="classic" flat={true}>listen</Button>
+		<Button on:click={changeStatus} type="classic" flat={true}>think</Button>
+		<Button on:click={changeStatus} type="classic" flat={true}>listen</Button>
 	</div>
 	<!-- control situation -->
 	<div>
