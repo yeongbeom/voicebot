@@ -67,8 +67,10 @@
 		<div id="media-local" style="display: none">
 			<h2>Media</h2>
 
-			<audio id="webrtc-audio-local" autoplay={true} />
-			<video id="webrtc-video-local" autoplay={true} playsinline={true} />
+			<audio id="webrtc-audio-local" autoplay />
+			<video id="webrtc-video-local" autoplay playsinline>
+				<track kind="captions" />
+			</video>
 		</div>
 
 		<h2>Data channel</h2>
