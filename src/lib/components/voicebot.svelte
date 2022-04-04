@@ -1,9 +1,24 @@
 <script lang="ts">
-	import BasicExpression from '$lib/components/expressions/basic.svelte';
+	import BasicExpressions from '$lib/components/expressions/basic.svelte';
 	import SpeechBubble from '$lib/components/speech-bubble.svelte';
 </script>
 
-<BasicExpression class='expression' />
-<SpeechBubble class='speech-bubble' />
+<div class="voicebot">
+	<div class="expressions">
+		<BasicExpressions />
+	</div>
+	<div class="speech-bubble">
+		<SpeechBubble />
+	</div>
+</div>
 
-<style></style>
+<style>
+	.voicebot {
+		display: grid;
+		grid-template-columns: 1fr;
+	}
+	.voicebot div {
+		grid-row-start: 1;
+		grid-column-start: 1;
+	}
+</style>

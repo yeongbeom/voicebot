@@ -11,5 +11,17 @@
 	});
 </script>
 
-<VoiceBot />
-<TestBtns />
+<div class="test-container">
+	<div class="voicebot">
+		<VoiceBot />
+	</div>
+	<div class="testBtns">
+		<TestBtns />
+	</div>
+</div>
+
+<style>
+	.testBtns {
+		padding-top: 200px;
+	}
+</style>
