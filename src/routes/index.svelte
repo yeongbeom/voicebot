@@ -4,6 +4,9 @@
 <div>
 	<a href="/test/voicebot">Test voicebot</a>
 </div>
+<div>
+	<a href="/test/webrtc">Test webrtc</a>
+</div>
 
 <style>
 	a {
