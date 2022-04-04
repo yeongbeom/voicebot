@@ -31,7 +31,7 @@
 		<Button on:click={changeExpression} type="classic" flat={true}>think</Button>
 		<Button on:click={changeExpression} type="classic" flat={true}>listen</Button>
 	</div>
-	<!-- control status -->
+	<!-- control talking status -->
 	<div>
 		<Button on:click={toggleTalkStatus} type="primary" flat={true}>talking</Button>
 	</div>
@@ -47,5 +47,3 @@
 		<Button on:click={updateStatus} type="secondary" flat={true}>talking</Button>
 	</div>
 </div>
-
-<div class="status">status</div>
