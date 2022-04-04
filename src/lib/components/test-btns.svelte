@@ -10,7 +10,6 @@
 	};
 	const updateStatus = (e) => {
 		$currentStatus = e.target.innerText.toLowerCase();
-		console.log($currentStatus);
 	};
 </script>
 

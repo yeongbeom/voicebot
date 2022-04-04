@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { currentStatus, status } from '$lib/stores/bot';
+
 	import { onMount } from 'svelte';
 
 	export let message = '연결 중...<br />잠시만 기다려주세요';
@@ -13,6 +15,45 @@
 	let width = '100%';
 
 	let path = 'M58.6451 254.298L29.4936 311.56L7.43998 293.115L58.6451 254.298Z';
+
+	const onStatusChange = () => {
+		switch ($currentStatus) {
+			case $status.init: {
+				message = '연결 중...<br />잠시만 기다려주세요';
+				bubbleColor = '#2B2B2B';
+				break;
+			}
+			case $status.idle: {
+				message = '안녕하세요';
+				bubbleColor = '#2B2B2B';
+				break;
+			}
+			case $status.listening: {
+				message = '듣는 중...<br />';
+				bubbleColor = '#0059FF';
+				break;
+			}
+			case $status.thinking: {
+				message = '생각 중...<br />';
+				bubbleColor = '#41A201';
+				break;
+			}
+			case $status.talking: {
+				bubbleColor = '#2B2B2B';
+				break;
+			}
+			default: {
+				console.error('Invalid status change');
+				bubbleColor = '#2B2B2B';
+				break;
+			}
+		}
+	};
+
+	$: {
+		$currentStatus;
+		onStatusChange();
+	}
 
 	onMount(() => {
 		const screenSize = window.matchMedia(mediaQueryString);
@@ -51,11 +92,22 @@
 		class="bubble"
 		style="--top: {top}; --left: {left}; --bubble-color: {bubbleColor}; --text-color: {textColor}"
 	>
+		{#if $currentStatus === $status.listening || $currentStatus === $status.thinking}
+			<div class="effect">
+				<table>
+					<tr><td><i /></td><td><i /></td><td><i /></td></tr>
+				</table>
+			</div>
+		{/if}
 		{@html message}
 	</div>
 </div>
 
 <style>
+	:root {
+		--point-color: #ffae00;
+	}
+
 	.tip {
 		overflow: visible;
 	}
@@ -82,6 +134,7 @@
 		border-radius: 10px;
 		font-weight: bolder;
 		overflow: scroll;
+		text-align: center;
 		font-size: 25px;
 		padding: 40px;
 		color: var(--text-color);
@@ -90,5 +143,40 @@
 
 	.bubble::-webkit-scrollbar {
 		display: none;
+	}
+
+	.effect table {
+		margin: 0 auto;
+	}
+	.effect table tr:first-child td {
+		height: 20px;
+		padding-left: 8px;
+	}
+	.effect i {
+		width: 10px;
+		height: 10px;
+		border-radius: 50%;
+		background-color: var(--point-color);
+		float: left;
+	}
+	.effect tr td:first-child i {
+		animation: _stateAni 3s infinite;
+	}
+	.effect tr td:nth-child(2) i {
+		animation: _stateAni 3s infinite;
+		animation-delay: 0.5s;
+	}
+	.effect tr td:last-child i {
+		animation: _stateAni 3s infinite;
+		animation-delay: 1s;
+	}
+	@keyframes _stateAni {
+		0%,
+		100% {
+			opacity: 1;
+		}
+		50% {
+			opacity: 0;
+		}
 	}
 </style>

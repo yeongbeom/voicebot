@@ -27,33 +27,3 @@ export const status = readable({
 	thinking: 'thinking',
 	talking: 'talking'
 });
-
-// switch ($currentStatus) {
-// 	case $status.init: {
-// 		console.log(0);
-// 		break;
-// 	}
-// 	case $status.idle: {
-// 		console.log(1);
-// 		break;
-// 	}
-// 	case $status.listen: {
-// 		console.log(2);
-// 		break;
-// 	}
-// 	case $status.think: {
-// 		console.log(3);
-// 		break;
-// 	}
-// 	case $status.speak: {
-// 		console.log(4);
-// 		break;
-// 	}
-// 	default: {
-// 		console.log(5);
-// 		break;
-// 	}
-// }
-// setInterval(() => {
-// 	$currentStatus = $status.think;
-// }, 3000);
