@@ -3,5 +3,7 @@
 	import SpeechBubble from '$lib/components/speech-bubble.svelte';
 </script>
 
-<BasicExpression />
-<SpeechBubble />
+<BasicExpression class='expression' />
+<SpeechBubble class='speech-bubble' />
+
+<style></style>

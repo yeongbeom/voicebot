@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Button from '$lib/shared/button.svelte';
-	import { currentExpression, isTalking } from '$lib/stores/bot';
+	import { currentExpression, currentStatus, isTalking } from '$lib/stores/bot';
 
 	const changeExpression = (e) => {
 		$currentExpression = e.target.innerText.toLowerCase();
@@ -8,7 +8,10 @@
 	const toggleTalkStatus = () => {
 		$isTalking = !$isTalking;
 	};
-	const updateStatus = () => {};
+	const updateStatus = (e) => {
+		$currentStatus = e.target.innerText.toLowerCase();
+		console.log($currentStatus);
+	};
 </script>
 
 <div class="expressions">

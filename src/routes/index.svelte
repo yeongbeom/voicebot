@@ -2,10 +2,7 @@
 </script>
 
 <div>
-	<a href="/test/expressions">Test expressions</a>
-</div>
-<div>
-	<a href="/test/bubble">Test bubble</a>
+	<a href="/test/voicebot">Test voicebot</a>
 </div>
 
 <style>
