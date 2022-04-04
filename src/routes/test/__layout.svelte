@@ -10,12 +10,5 @@
 	<slot />
 </main>
 
-<footer>
-	<!-- <p>Copyright 2022</p> -->
-</footer>
-
 <style>
-	footer {
-		display: flex;
-	}
 </style>

@@ -13,35 +13,43 @@
 		'use-stun': 'on'
 	};
 	const debugMode = false;
+	let webrtcLocal, webrtcRemote;
 
 	onMount(() => {
-		// get DOM elements
-		const domElemLocal = genDomElem('-local');
-		const domElemRemote = genDomElem('-remote');
+		try {
+			// get DOM elements
+			const domElemLocal = genDomElem('-local');
+			const domElemRemote = genDomElem('-remote');
 
-		let webrtcLocal, webrtcRemote;
+			webrtcLocal = webrtcStart(
+				$endpoints.offerLocalEndpoint,
+				webrtcParams,
+				debugMode,
+				domElemLocal
+			);
+			// webrtcRemote = webrtcStart(
+			// 	$endpoints.offerRemoteEndpoint,
+			// 	webrtcParams,
+			// 	debugMode,
+			// 	domElemRemote
+			// );
+			domElemLocal.startBtn.style.display = 'none';
+			domElemLocal.stopBtn.style.display = 'inline-block';
+			// domElemRemote.startBtn.style.display = 'none';
+			// domElemRemote.stopBtn.style.display = 'inline-block';
 
-		webrtcLocal = webrtcStart($endpoints.offerLocalEndpoint, webrtcParams, debugMode, domElemLocal);
-		webrtcRemote = webrtcStart(
-			$endpoints.offerRemoteEndpoint,
-			webrtcParams,
-			debugMode,
-			domElemRemote
-		);
-		domElemLocal.startBtn.style.display = 'none';
-		domElemLocal.stopBtn.style.display = 'inline-block';
-		domElemRemote.startBtn.style.display = 'none';
-		domElemRemote.stopBtn.style.display = 'inline-block';
+			domElemLocal.stopBtn.onclick = () => {
+				webrtcStop(webrtcLocal);
+				domElemLocal.stopBtn.style.display = 'none';
+			};
 
-		domElemLocal.stopBtn.onclick = () => {
-			webrtcStop(webrtcLocal);
-			domElemLocal.stopBtn.style.display = 'none';
-		};
-
-		domElemRemote.stopBtn.onclick = () => {
-			webrtcStop(webrtcRemote);
-			domElemRemote.stopBtn.style.display = 'none';
-		};
+			// domElemRemote.stopBtn.onclick = () => {
+			// 	webrtcStop(webrtcRemote);
+			// 	domElemRemote.stopBtn.style.display = 'none';
+			// };
+		} catch (error) {
+			console.error(error);
+		}
 	});
 </script>
 
@@ -74,7 +82,7 @@
 		<h3>Answer</h3>
 		<pre id="answer-sdp-local" />
 	</div>
-	<div class="flex-col">
+	<!-- <div class="flex-col">
 		<h1>KETI</h1>
 		<button id="start-remote">Start</button>
 		<button id="stop-remote" style="display: none">Stop</button>
@@ -103,5 +111,5 @@
 
 		<h3>Answer</h3>
 		<pre id="answer-sdp-remote" />
-	</div>
+	</div> -->
 </div>
