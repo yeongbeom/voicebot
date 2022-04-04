@@ -1,9 +1,49 @@
-<script lang='ts'>
+<script lang="ts">
+	import { endpoints } from '$lib/stores/endpoints';
+	import { genDomElem, webrtcStart, webrtcStop } from '$lib/webrtc';
+	import { onDestroy, onMount } from 'svelte';
 
+	const webrtcParams = {
+		'datachannel-parameters': '{"ordered": true}',
+		'audio-codec': 'opus/48000/2',
+		'use-video': 'on',
+		'video-resolution': '320x240',
+		'video-transform': 'none',
+		'video-codec': 'H264/90000',
+		'use-stun': 'on'
+	};
+	const debugMode = false;
 
+	onMount(() => {
+		// get DOM elements
+		const domElemLocal = genDomElem('-local');
+		const domElemRemote = genDomElem('-remote');
+
+		let webrtcLocal, webrtcRemote;
+
+		webrtcLocal = webrtcStart($endpoints.offerLocalEndpoint, webrtcParams, debugMode, domElemLocal);
+		webrtcRemote = webrtcStart(
+			$endpoints.offerRemoteEndpoint,
+			webrtcParams,
+			debugMode,
+			domElemRemote
+		);
+		domElemLocal.startBtn.style.display = 'none';
+		domElemLocal.stopBtn.style.display = 'inline-block';
+		domElemRemote.startBtn.style.display = 'none';
+		domElemRemote.stopBtn.style.display = 'inline-block';
+
+		domElemLocal.stopBtn.onclick = () => {
+			webrtcStop(webrtcLocal);
+			domElemLocal.stopBtn.style.display = 'none';
+		};
+
+		domElemRemote.stopBtn.onclick = () => {
+			webrtcStop(webrtcRemote);
+			domElemRemote.stopBtn.style.display = 'none';
+		};
+	});
 </script>
-
-
 
 <div class="flex-container">
 	<div class="flex-col">
