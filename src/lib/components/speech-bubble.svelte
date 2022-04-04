@@ -10,6 +10,7 @@
 	let exprSize = `${expressionSize}px`;
 	let top = '300px';
 	let left = '0px';
+	let width = '100%';
 
 	let path = 'M58.6451 254.298L29.4936 311.56L7.43998 293.115L58.6451 254.298Z';
 
@@ -20,10 +21,12 @@
 				path = 'M58.6451 254.298L29.4936 311.56L7.43998 293.115L58.6451 254.298Z';
 				top = '330px';
 				left = '0px';
+				width = '100%';
 			} else {
 				path = 'M281.527 177.738L391.62 102.15L409.853 140.772L281.527 177.738Z';
 				top = '60px';
 				left = '430px';
+				width = '50%';
 			}
 		};
 		putBubble(screenSize);
@@ -33,7 +36,7 @@
 	});
 </script>
 
-<div class="msg-section">
+<div class="msg-section" style="--width: {width}">
 	<svg
 		class="tip"
 		width={exprSize}
@@ -58,16 +61,22 @@
 	}
 
 	.msg-section {
-		width: 50%;
-		position: relative;
+		width: var(--width);
+		display: grid;
+		grid-template-columns: 1fr;
+	}
+
+	.msg-section svg,
+	.msg-section .bubble {
+		grid-row-start: 1;
+		grid-column-start: 1;
 	}
 
 	.bubble {
 		width: 90%;
-		position: absolute;
+		margin-top: var(--top);
+		margin-left: var(--left);
 		overflow-wrap: break-word;
-		top: var(--top);
-		left: var(--left);
 		height: max-content;
 		max-height: 50%;
 		border-radius: 10px;

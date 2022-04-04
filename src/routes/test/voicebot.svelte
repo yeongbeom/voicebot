@@ -21,7 +21,4 @@
 </div>
 
 <style>
-	.testBtns {
-		padding-top: 200px;
-	}
 </style>
