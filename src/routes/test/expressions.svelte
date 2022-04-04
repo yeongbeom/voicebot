@@ -1,5 +1,5 @@
 <script lang="ts">
-	import BasicExpression from '$lib/components/expressions/basic.svelte';
+	import VoiceBot from '$lib/components/voicebot.svelte';
 	import TestBtns from '$lib/components/test-btns.svelte';
 	import { onMount, onDestroy } from 'svelte';
 
@@ -11,5 +11,5 @@
 	});
 </script>
 
-<BasicExpression />
+<VoiceBot />
 <TestBtns />

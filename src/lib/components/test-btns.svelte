@@ -8,6 +8,7 @@
 	const toggleTalkStatus = () => {
 		$isTalking = !$isTalking;
 	};
+	const updateStatus = () => {};
 </script>
 
 <div class="expressions">
@@ -31,6 +32,17 @@
 	<!-- control status -->
 	<div>
 		<Button on:click={toggleTalkStatus} type="primary" flat={true}>talking</Button>
+	</div>
+</div>
+
+<div class="speech-bubble">
+	<!-- control status -->
+	<div>
+		<Button on:click={updateStatus} type="secondary" flat={true}>init</Button>
+		<Button on:click={updateStatus} type="secondary" flat={true}>idle</Button>
+		<Button on:click={updateStatus} type="secondary" flat={true}>listening</Button>
+		<Button on:click={updateStatus} type="secondary" flat={true}>thinking</Button>
+		<Button on:click={updateStatus} type="secondary" flat={true}>talking</Button>
 	</div>
 </div>
 
