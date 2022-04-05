@@ -5,6 +5,9 @@
 	<a href="/test/all">Test all</a>
 </div>
 <div>
+	<a href="/test/talk">Test talk</a>
+</div>
+<div>
 	<a href="/test/voicebot">Test voicebot</a>
 </div>
 <div>

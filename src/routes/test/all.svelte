@@ -6,11 +6,11 @@
 	import { currentStatus, status } from '$lib/stores/bot';
 
 	onMount(() => {
-		console.log('expressions.svelte mounted');
+		console.log('all.svelte mounted');
 		$currentStatus = $status.idle;
 	});
 	onDestroy(() => {
-		console.log('expressions.svelte destroyed');
+		console.log('all.svelte destroyed');
 	});
 </script>
 

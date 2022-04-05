@@ -1,12 +1,19 @@
 <script lang="ts">
-	import { currentStatus, status } from '$lib/stores/bot';
+	import {
+		currentExpression,
+		currentStatus,
+		expression,
+		isTalking,
+		message,
+		status
+	} from '$lib/stores/bot';
 	import { fontSize } from '$lib/stores/ui';
 
 	import { onMount } from 'svelte';
 
-	export let message = '연결 중...<br />잠시만 기다려주세요';
 	export let bubbleColor = '#2B2B2B';
 	export let textColor = '#FFFFFF';
+	export let msgColor = '#FFFFFF;';
 	export let expressionSize = 300;
 	export let mediaQueryString = 'screen and (max-width: 767px), (orientation: portrait)';
 
@@ -35,34 +42,38 @@
 	};
 
 	const onStatusChange = () => {
+		msgColor = textColor;
+		bubbleColor = '#2B2B2B';
+		$isTalking = false;
+
 		switch ($currentStatus) {
 			case $status.init: {
-				message = '연결 중...<br />잠시만 기다려주세요';
-				bubbleColor = '#2B2B2B';
+				$currentExpression = $expression.neutral;
+				$currentStatus = $status.idle;
+				$message = '연결 중...<br />잠시만 기다려주세요';
 				break;
 			}
 			case $status.idle: {
-				message = '안녕하세요';
-				bubbleColor = '#2B2B2B';
 				break;
 			}
 			case $status.listening: {
-				message = '듣는 중...<br />';
+				$currentExpression = $expression.listen;
+				msgColor = '#A9A9A9';
 				bubbleColor = '#0059FF';
 				break;
 			}
 			case $status.thinking: {
-				message = '생각 중...<br />';
+				$currentExpression = $expression.think;
+				$message = '생각 중...<br />';
 				bubbleColor = '#41A201';
 				break;
 			}
 			case $status.talking: {
-				bubbleColor = '#2B2B2B';
+				$isTalking = true;
 				break;
 			}
 			default: {
 				console.error('Invalid status change');
-				bubbleColor = '#2B2B2B';
 			}
 		}
 	};
@@ -121,7 +132,12 @@
 				</table>
 			</div>
 		{/if}
-		{@html message}
+		{#if $currentStatus === $status.listening}
+			<div class="effect">듣는 중...<br /></div>
+		{/if}
+		<div class="message" style="--msg-color: {msgColor}">
+			{@html $message}
+		</div>
 	</div>
 </div>
 
@@ -157,6 +173,11 @@
 		padding: 40px;
 		color: var(--text-color);
 		background-color: var(--bubble-color);
+	}
+
+	.message {
+		margin: 0 auto;
+		color: var(--msg-color);
 	}
 
 	.bubble::-webkit-scrollbar {
