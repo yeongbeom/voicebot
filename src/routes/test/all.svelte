@@ -3,10 +3,12 @@
 	import ControlFont from '$lib/components/control-font.svelte';
 	import TestBtns from '$lib/components/test-btns.svelte';
 	import { onMount, onDestroy } from 'svelte';
-	import { currentStatus, status } from '$lib/stores/bot';
+	import { currentStatus, heard, say, status } from '$lib/stores/bot';
 
 	onMount(() => {
 		console.log('all.svelte mounted');
+		$say = '안녕하세요';
+		$heard = 'hello';
 		$currentStatus = $status.idle;
 	});
 	onDestroy(() => {
@@ -14,15 +16,6 @@
 	});
 </script>
 
-<div class="test-container">
-	<div class="voicebot">
-		<ControlFont />
-		<VoiceBot />
-	</div>
-	<div class="testBtns">
-		<TestBtns />
-	</div>
-</div>
-
-<style>
-</style>
+<ControlFont />
+<VoiceBot />
+<TestBtns />

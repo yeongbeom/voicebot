@@ -55,6 +55,7 @@
 				break;
 			}
 			case $status.idle: {
+				$currentExpression = $expression.neutral;
 				break;
 			}
 			case $status.listening: {

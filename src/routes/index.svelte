@@ -19,6 +19,9 @@
 <div>
 	<a href="/test/local-webrtc">Test local-webrtc</a>
 </div>
+<div>
+	<a href="/test/test">Test test</a>
+</div>
 
 <style>
 	a {
