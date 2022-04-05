@@ -1,3 +1,13 @@
+:root {
+	--text-color: #f0f4f5;
+	--background-color: #2b2b2b;
+	--point-color: #ffae00;
+	--btn-color: #4a4a4a;
+}
+
 body {
-    background-color: grey;
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+	background-color: grey;
 }

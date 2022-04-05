@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { currentStatus, status } from '$lib/stores/bot';
+	import { fontSize } from '$lib/stores/ui';
 
 	import { onMount } from 'svelte';
 
@@ -9,12 +10,29 @@
 	export let expressionSize = 300;
 	export let mediaQueryString = 'screen and (max-width: 767px), (orientation: portrait)';
 
+	let size: number;
 	let exprSize = `${expressionSize}px`;
-	let top = '300px';
-	let left = '0px';
-	let width = '100%';
+	let top: string;
+	let left: string;
+	let width: string;
 
 	let path = 'M58.6451 254.298L29.4936 311.56L7.43998 293.115L58.6451 254.298Z';
+
+	const onUiChange = () => {
+		switch ($fontSize) {
+			case 'small':
+				size = 16;
+				break;
+			case 'medium':
+				size = 25;
+				break;
+			case 'large':
+				size = 32;
+				break;
+			default:
+				console.error('Invalid font change');
+		}
+	};
 
 	const onStatusChange = () => {
 		switch ($currentStatus) {
@@ -45,10 +63,14 @@
 			default: {
 				console.error('Invalid status change');
 				bubbleColor = '#2B2B2B';
-				break;
 			}
 		}
 	};
+
+	$: {
+		$fontSize;
+		onUiChange();
+	}
 
 	$: {
 		$currentStatus;
@@ -65,7 +87,7 @@
 				width = '100%';
 			} else {
 				path = 'M281.527 177.738L391.62 102.15L409.853 140.772L281.527 177.738Z';
-				top = '60px';
+				top = '90px';
 				left = '430px';
 				width = '50%';
 			}
@@ -90,7 +112,7 @@
 	</svg>
 	<div
 		class="bubble"
-		style="--top: {top}; --left: {left}; --bubble-color: {bubbleColor}; --text-color: {textColor}"
+		style="--font-size: {size}px;--top: {top}; --left: {left}; --bubble-color: {bubbleColor}; --text-color: {textColor}"
 	>
 		{#if $currentStatus === $status.listening || $currentStatus === $status.thinking}
 			<div class="effect">
@@ -104,10 +126,6 @@
 </div>
 
 <style>
-	:root {
-		--point-color: #ffae00;
-	}
-
 	.tip {
 		overflow: visible;
 	}
@@ -135,7 +153,7 @@
 		font-weight: bolder;
 		overflow: scroll;
 		text-align: center;
-		font-size: 25px;
+		font-size: var(--font-size);
 		padding: 40px;
 		color: var(--text-color);
 		background-color: var(--bubble-color);
