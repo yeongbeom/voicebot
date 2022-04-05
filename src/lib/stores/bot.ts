@@ -1,6 +1,7 @@
 import { readable, writable } from 'svelte/store';
 
-export const message = writable('');
+export const heard = writable('');
+export const say = writable('');
 
 export const currentExpression = writable('neutral');
 

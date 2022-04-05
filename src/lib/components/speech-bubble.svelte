@@ -4,7 +4,8 @@
 		currentStatus,
 		expression,
 		isTalking,
-		message,
+		heard,
+		say,
 		status
 	} from '$lib/stores/bot';
 	import { fontSize } from '$lib/stores/ui';
@@ -50,7 +51,7 @@
 			case $status.init: {
 				$currentExpression = $expression.neutral;
 				$currentStatus = $status.idle;
-				$message = '연결 중...<br />잠시만 기다려주세요';
+				$say = '연결 중...<br />잠시만 기다려주세요';
 				break;
 			}
 			case $status.idle: {
@@ -64,7 +65,6 @@
 			}
 			case $status.thinking: {
 				$currentExpression = $expression.think;
-				$message = '생각 중...<br />';
 				bubbleColor = '#41A201';
 				break;
 			}
@@ -125,19 +125,30 @@
 		class="bubble"
 		style="--font-size: {size}px;--top: {top}; --left: {left}; --bubble-color: {bubbleColor}; --text-color: {textColor}"
 	>
-		{#if $currentStatus === $status.listening || $currentStatus === $status.thinking}
+		{#if $currentStatus === $status.init}
+			{@html $say}
+		{:else if $currentStatus === $status.idle}
+			{@html $say}
+		{:else if $currentStatus === $status.listening}
 			<div class="effect">
 				<table>
 					<tr><td><i /></td><td><i /></td><td><i /></td></tr>
 				</table>
 			</div>
+			<div>듣는 중...<br /></div>
+			<div class="heard" style="--msg-color: {msgColor}">
+				{@html $heard}
+			</div>
+		{:else if $currentStatus === $status.thinking}
+			<div class="effect">
+				<table>
+					<tr><td><i /></td><td><i /></td><td><i /></td></tr>
+				</table>
+			</div>
+			<div>생각 중...<br /></div>
+		{:else if $currentStatus === $status.talking}
+			{@html $say}
 		{/if}
-		{#if $currentStatus === $status.listening}
-			<div class="effect">듣는 중...<br /></div>
-		{/if}
-		<div class="message" style="--msg-color: {msgColor}">
-			{@html $message}
-		</div>
 	</div>
 </div>
 
@@ -175,7 +186,7 @@
 		background-color: var(--bubble-color);
 	}
 
-	.message {
+	.heard {
 		margin: 0 auto;
 		color: var(--msg-color);
 	}
