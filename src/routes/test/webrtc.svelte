@@ -12,7 +12,7 @@
 		'video-codec': 'H264/90000',
 		'use-stun': 'on'
 	};
-	const debugMode = false;
+	const debugMode = true;
 	let webrtcLocal, webrtcRemote;
 
 	onMount(() => {
