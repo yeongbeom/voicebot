@@ -24,23 +24,22 @@
 </main>
 
 <style>
-	nav {
-		display: flex;
-		align-items: center;
-		padding: 30px;
-	}
 	.links {
-		margin: auto;
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+		padding: 20px;
 	}
 	a {
 		font-family: Arial, Arial, Helvetica, sans-serif;
-		font-size: 2rem;
+		font-size: 1rem;
 		color: rgb(68, 61, 61);
 		border: solid;
 		border-color: greenyellow;
 		border-radius: 10px;
 		width: fit-content;
 		padding: 10px;
+		margin: 3px;
 	}
 	a:link {
 		text-decoration: none;
