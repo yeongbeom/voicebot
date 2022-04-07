@@ -15,6 +15,7 @@
 <h1>General</h1>
 <div>
 	<input type="checkbox" name="debug-mode" id="debug-mode" bind:checked={$debugMode} />
+	<label for="debug-mode">Debug mode</label>
 </div>
 
 <h2>WebRTC settings</h2>
