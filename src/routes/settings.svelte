@@ -1,3 +1,22 @@
+<script lang="ts">
+	import { debugMode } from '$lib/stores/config';
+	import { onDestroy } from 'svelte';
+
+	const interval = setInterval(() => {
+		console.log($debugMode);
+	}, 5000);
+
+	onDestroy(() => {
+		console.log('settings.svelte destroyed');
+		clearInterval(interval);
+	});
+</script>
+
+<h1>General</h1>
+<div>
+	<input type="checkbox" name="debug-mode" id="debug-mode" bind:checked={$debugMode} />
+</div>
+
 <h2>WebRTC settings</h2>
 
 <form action="/settings" id="webrtc" method="POST">

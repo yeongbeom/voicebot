@@ -1,8 +1,8 @@
 <script lang="ts">
-	import VoiceBot from '$lib/components/voicebot.svelte';
 	import { onMount, onDestroy } from 'svelte';
 	import { currentStatus, say, heard, status, currentExpression } from '$lib/stores/bot';
 	import { endpoints } from '$lib/stores/endpoints';
+	import { debugMode } from '$lib/stores/config';
 
 	// audio data conversion setup
 	let base64data;
@@ -10,9 +10,10 @@
 	const audioLetency = 200; // TODO: optimize value
 
 	let chunks = [];
-	let debugMode = true;
 
 	onMount(() => {
+		console.log('talk.svelte mounted');
+
 		const reader = new FileReader();
 		const gnSpeechRecognition = (mediaRecorder) => {
 			if ((window as any).SpeechRecognition || (window as any).webkitSpeechRecognition) {
@@ -96,7 +97,7 @@
 						const blob = new Blob(chunks, {
 							type: 'audio/webm; codecs=opus'
 						});
-						if (debugMode) {
+						if ($debugMode) {
 							const clipContainer = document.createElement('article');
 							const audio = document.createElement('audio');
 
@@ -151,19 +152,18 @@
 			}
 		};
 
-		console.log('voicebot.svelte mounted');
 		$currentStatus = $status.idle;
 		$say = '안녕하세요';
 		talk();
 	});
 	onDestroy(() => {
-		console.log('voicebot.svelte destroyed');
+		console.log('talk.svelte destroyed');
 	});
 </script>
 
-<VoiceBot />
-
-<h1>Audio Test</h1>
-<div class="audio">
-	<section class="sound-clips" />
-</div>
+{#if $debugMode}
+	<div>
+		<h1>VAD debug</h1>
+		<section class="sound-clips" />
+	</div>
+{/if}

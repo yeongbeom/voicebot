@@ -1,53 +1,23 @@
 <script lang="ts">
+	import VoiceBot from '$lib/components/voicebot.svelte';
+	import ControlFont from '$lib/components/control-font.svelte';
+	import TestBtns from '$lib/components/test-btns.svelte';
+	import { onMount, onDestroy } from 'svelte';
+	import { currentStatus, status } from '$lib/stores/bot';
+	import { debugMode } from '$lib/stores/config';
+
+	onMount(() => {
+		console.log('all.svelte mounted');
+		$currentStatus = $status.idle;
+	});
+	onDestroy(() => {
+		console.log('all.svelte destroyed');
+	});
 </script>
 
-<div>
-	<a href="/test/all">Test all</a>
-</div>
-<div>
-	<a href="/test/talk">Test talk</a>
-</div>
-<div>
-	<a href="/test/voicebot">Test voicebot</a>
-</div>
-<div>
-	<a href="/test/font">Test font</a>
-</div>
-<div>
-	<a href="/test/webrtc">Test WebRTC</a>
-</div>
-<div>
-	<a href="/test/local-webrtc">Test</a>
-</div>
+<ControlFont />
+<VoiceBot />
 
-<style>
-	div {
-		border: solid;
-		border-color: greenyellow;
-		border-radius: 10px;
-		width: fit-content;
-		margin: 10px auto;
-		padding: 10px;
-	}
-	a {
-		font-family: Arial, Arial, Helvetica, sans-serif;
-		font-size: 3rem;
-		color: rgb(68, 61, 61);
-	}
-
-	a:link {
-		text-decoration: none;
-	}
-
-	a:visited {
-		text-decoration: none;
-	}
-
-	a:hover {
-		text-decoration: none;
-	}
-
-	a:active {
-		text-decoration: none;
-	}
-</style>
+{#if $debugMode}
+	<TestBtns />
+{/if}

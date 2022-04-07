@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { debugMode } from '$lib/stores/config';
 	import { endpoints } from '$lib/stores/endpoints';
 	import { genDomElem, webrtcStart, webrtcStop } from '$lib/webrtc';
 	import { onDestroy, onMount } from 'svelte';
@@ -12,7 +13,6 @@
 		'video-codec': 'H264/90000',
 		'use-stun': 'on'
 	};
-	const debugMode = true;
 	let webrtcLocal, webrtcRemote;
 
 	onMount(() => {
@@ -24,13 +24,13 @@
 			webrtcLocal = webrtcStart(
 				$endpoints.offerLocalEndpoint,
 				webrtcParams,
-				debugMode,
+				$debugMode,
 				domElemLocal
 			);
 			// webrtcRemote = webrtcStart(
 			// 	$endpoints.offerRemoteEndpoint,
 			// 	webrtcParams,
-			// 	debugMode,
+			// 	$debugMode,
 			// 	domElemRemote
 			// );
 			domElemLocal.startBtn.style.display = 'none';

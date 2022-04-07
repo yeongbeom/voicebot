@@ -1,6 +1,7 @@
 <script lang="ts">
 	import BasicExpressions from '$lib/components/expressions/basic.svelte';
 	import SpeechBubble from '$lib/components/speech-bubble.svelte';
+	import Talk from '$lib/components/talk.svelte';
 </script>
 
 <div class="voicebot">
@@ -11,6 +12,7 @@
 		<SpeechBubble />
 	</div>
 </div>
+<Talk />
 
 <style>
 	.voicebot {
