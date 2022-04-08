@@ -1,40 +1,54 @@
-# create-svelte
+# Requirements
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
+- Chromium-based browser
 
-## Creating a project
+- Peripherals
 
-If you're seeing this, you've probably already done this step. Congrats!
+  - Video/audio input devices (e.g. webcam)
+  - Display/audio output device (e.g. touch display/speaker)
 
-```bash
-# create a new project in the current directory
-npm init svelte@next
+- Raspberry Pi OS settings
 
-# create a new project in my-app
-npm init svelte@next my-app
-```
+  - Set up WIFI with on-screen keyboard
+  - Go to the main menu and open the Raspberry Pi Configuration tool. Select the Interfaces tab and ensure that the camera is enabled. Reboot your Raspberry Pi.
+  - Adjust audio volume
+  - Screen resolution of 800 x 480 pixels
+  - Auto-hide taskbar
+  - Right-click on the taskbar and select "Panel Settings". Click on the "Advanced" tab, and check "Minimize panel when not in use".
+  - Install Korean language
 
-> Note: the `@next` is temporary
+  ```bash
+  sudo apt-get install fonts-unfonts-core
+  sudo apt-get install ibus ibus-hangul
+  sudo reboot
+  ```
 
-## Developing
+  - How to start Chromium on Raspberry boot?
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+  ```bash
+  sudo nano /etc/xdg/lxsession/LXDE-pi/autostart
+  ```
 
-```bash
-npm run dev
+  - Add this to what is already there:
 
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
+  ```bash
+  @chromium-browser --start-fullscreen --kiosk https://YourServerURL.com
+  ```
 
-## Building
+  - Next press CTRL+X and type Y for saving the file
 
-To create a production version of your app:
+  - How to disable SSH password warning?
 
-```bash
-npm run build
-```
+  ```bash
+  sudo rm /etc/xdg/lxsession/LXDE-pi/sshpwd.sh
+  ```
 
-You can preview the production build with `npm run preview`.
+  - Optional settings
+  - Enable VNC/SSH
+  - https://blog.r0b.io/post/minimal-rpi-kiosk/
 
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+# WebRTC references
+
+- Python WebRTC basics with aiortc, https://dev.to/whitphx/python-webrtc-basics-with-aiortc-48id
+<!-- - Building a WebRTC video broadcast using Javascript, https://gabrieltanner.org/blog/webrtc-video-broadcast
+- WebRTC tutorial, https://www.youtube.com/watch?v=QJMM758oCYk&list=PLayYqdnyegt0qX8EfEGExxZF3DxkyA1Dj -->
