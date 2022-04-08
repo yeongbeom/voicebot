@@ -11,10 +11,11 @@
 		<div class="links">
 			<a href="/">Main</a>
 			<a href="/settings">Settings</a>
-			<a href="/test/voicebot">Test voicebot</a>
-			<a href="/test/font">Test font</a>
-			<a href="/test/webrtc">Test WebRTC</a>
-			<a href="/test/local-webrtc">Test</a>
+			<a href="/services/todo">Todo</a>
+			<a href="/tests/voicebot">Test voicebot</a>
+			<a href="/tests/font">Test font</a>
+			<a href="/tests/webrtc">Test WebRTC</a>
+			<a href="/tests/local-webrtc">Test</a>
 		</div>
 	</nav>
 </header>
