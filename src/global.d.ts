@@ -1,8 +1,8 @@
-/// <reference types="@sveltejs/kit" />
+// /// <reference types="@sveltejs/kit" />
 
-type Todo = {
-	uid: string;
-	created_at: Date;
-	text: string;
-	done: boolean;
-};
+// type Todo = {
+// 	uid: string;
+// 	created_at: Date;
+// 	text: string;
+// 	done: boolean;
+// };
