@@ -10,8 +10,8 @@
 
 <h1>{title}</h1>
 
-<form action="" method="" class="new">
-	<input type="text" name="text" aria-label="Add a todo" placeholder="+ type to add a todo" />
+<form action="/services/todo-list/todo-api.json" method="post" class="new">
+	<input type="text" name="add-todo" aria-label="Add a todo" placeholder="+ type to add a todo" />
 </form>
 
 <TodoItem />
@@ -67,7 +67,7 @@
 			result: processNewTodoResult
 		}}
 	>
-		<input type="text" name="text" aria-label="Add a todo" placeholder="+ type to add a todo" />
+		<input type="text" name="add-todo" aria-label="Add a todo" placeholder="+ type to add a todo" />
 	</form>
 
 	{#each todos as todo}
