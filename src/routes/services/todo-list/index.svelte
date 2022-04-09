@@ -1,4 +1,22 @@
-<script lang="ts" context="module">
+<script lang="ts">
+	import TodoItem from '$lib/components/todo-item.svelte';
+
+	const title = 'Todo';
+</script>
+
+<svelte:head>
+	<title>{title}</title>
+</svelte:head>
+
+<h1>{title}</h1>
+
+<form action="" method="" class="new">
+	<input type="text" name="text" aria-label="Add a todo" placeholder="+ type to add a todo" />
+</form>
+
+<TodoItem />
+
+<!-- <script lang="ts" context="module">
 	import type { Load } from '@sveltejs/kit';
 	import { enhance } from '$lib/actions/form';
 	export const load: Load = async ({ fetch }) => {
@@ -61,8 +79,7 @@
 			{processUpdatedTodoResult}
 		/>
 	{/each}
-</div>
-
+</div> -->
 <style>
 	.todos {
 		width: 100%;

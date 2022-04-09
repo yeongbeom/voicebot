@@ -1,4 +1,20 @@
-<script lang="ts">
+<div class="todo">
+	<form action="" method="">
+		<input type="hidden" name="done" value="" />
+		<button aria-label="Mark done/not done" class="toggle" />
+	</form>
+
+	<form action="" method="" class="text">
+		<input type="text" />
+		<button aria-label="Save-todo" class="save" />
+	</form>
+
+	<form action="" method="">
+		<button aria-label="Delete todo" class="delete" />
+	</form>
+</div>
+
+<!-- <script lang="ts">
 	import { enhance } from '$lib/actions/form';
 	export let todo: Todo;
 	export let processDeletedTodoResult: (res: Response) => void;
@@ -38,8 +54,7 @@
 	>
 		<button aria-label="Delete todo" class="delete" />
 	</form>
-</div>
-
+</div> -->
 <style>
 	.todo {
 		display: grid;
