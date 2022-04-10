@@ -3,12 +3,6 @@ import type { RequestHandler } from '@sveltejs/kit';
 
 const prisma = new PrismaClient();
 
-// import { todos } from './_todos';
-
-// export const get = (request) => {
-// 	console.log(request.params.uid);
-// };
-
 export const del: RequestHandler = async ({ request, params }) => {
 	const res = await request.formData();
 
@@ -17,8 +11,6 @@ export const del: RequestHandler = async ({ request, params }) => {
 			uid: params.uid
 		}
 	});
-
-	// todos.filter((todo) => todo.uid !== params.uid);
 
 	return {
 		status: 303,
