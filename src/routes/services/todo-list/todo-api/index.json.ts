@@ -13,24 +13,18 @@ export const get: RequestHandler = async () => {
 	};
 };
 
-// export const post: RequestHandler<Request, FormData> = (request) => {
 export const post: RequestHandler = async ({ request }) => {
+	const res = await request.formData();
+	const todoPost = res.get('add-todo'); 
+
 	const status = 201;
-	// const body = await prisma.todo.create({
-	// 	data: {
-	// 		created_at: new Date() as Date,
-	// 		text: request.formData() as string,
-	// 		done: false as boolean
-	// 	}
-	// });
-
-// 		text: request.body.get('text'),
-
-	const body = request.formData();
-
-	console.log('api post request:', body);
-	console.log('api post request:', request.body);
-	console.log('api post request text:', request.json());
+	const body = await prisma.todo.create({
+		data: {
+			created_at: new Date() as Date,
+			text: todoPost as string,
+			done: false as boolean
+		}
+	});
 
 	return {
 		status,
