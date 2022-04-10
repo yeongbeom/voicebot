@@ -3,7 +3,7 @@ import type { RequestHandler } from '@sveltejs/kit';
 
 // const prisma = new PrismaClient();
 
-const todos: Todo[] = [];
+import { todos } from './_todos';
 
 export const get: RequestHandler = async () => {
 	const status = 200;

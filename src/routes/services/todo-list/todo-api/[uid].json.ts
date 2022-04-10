@@ -1,5 +1,6 @@
 import type { RequestHandler } from '@sveltejs/kit';
-import { api } from './_api';
+
+import { todos } from './_todos';
 
 export const get = (request) => {
 	console.log(request.params.uid);
@@ -11,11 +12,11 @@ export const del: RequestHandler = async ({ request }) => {
 
 	const res = await request.formData();
 
-	body = await prisma.todo.delete({
-		where: {
-			uid: request.params.uid
-		}
-	});
+	// body = await prisma.todo.delete({
+	// 	where: {
+	// 		uid: request.params.uid
+	// 	}
+	// });
 
 	return {
 		status,
