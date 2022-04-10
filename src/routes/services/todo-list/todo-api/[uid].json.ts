@@ -6,11 +6,13 @@ export const get = (request) => {
 	console.log(request.params.uid);
 };
 
-export const del: RequestHandler = async ({ request }) => {
-	const status = 200;
-	let body = {};
+export const del: RequestHandler = async ({ params }) => {
+	// const status = 200;
+	// let body = {};
 
-	const res = await request.formData();
+	todos = todos.filter((todo) => todo.uid !== params.uid);
+
+	// const res = await request.formData();
 
 	// body = await prisma.todo.delete({
 	// 	where: {
@@ -18,18 +20,21 @@ export const del: RequestHandler = async ({ request }) => {
 	// 	}
 	// });
 
+
 	return {
-		status,
-		body
+		status: 303,
+		headers: {
+			location: '/services/todo-list/'
+		}
 	};
 };
 
-export const patch: RequestHandler = async ({ request }) => {
-	const status = 200;
-	const res = await request.formData();
+// export const patch: RequestHandler = async ({ request }) => {
+// 	const status = 200;
+// 	const res = await request.formData();
 
-	return api(res, {
-		text: res.has('text') ? res.get('text') : undefined,
-		done: res.has('done') ? !!res.get('done') : undefined
-	});
-};
+// 	return api(res, {
+// 		text: res.has('text') ? res.get('text') : undefined,
+// 		done: res.has('done') ? !!res.get('done') : undefined
+// 	});
+// };

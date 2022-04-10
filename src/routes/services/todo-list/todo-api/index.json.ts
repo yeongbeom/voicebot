@@ -30,6 +30,7 @@ export const post: RequestHandler = async ({ request }) => {
 	// });
 
 	todos.push({
+		uid: `${Date.now()}`, // TODO: Replace with the UID from the datbase
 		created_at: new Date() as Date,
 		text: todoPost as string,
 		done: false as boolean
