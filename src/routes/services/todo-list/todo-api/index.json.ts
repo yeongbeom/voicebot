@@ -17,7 +17,7 @@ export const post: RequestHandler = async ({ request }) => {
 	const res = await request.formData();
 	const todoPost = res.get('add-todo'); 
 
-	const status = 201;
+	// const status = 201;
 	const body = await prisma.todo.create({
 		data: {
 			created_at: new Date() as Date,
@@ -27,7 +27,9 @@ export const post: RequestHandler = async ({ request }) => {
 	});
 
 	return {
-		status,
-		body
+		status: 303,
+		headers: {
+			location: '/services/todo-list/'
+		}
 	};
 };
