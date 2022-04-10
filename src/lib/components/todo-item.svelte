@@ -1,4 +1,4 @@
-<script lang="ts">
+<!-- <script lang="ts">
 	export let todo: Todo;
 </script>
 
@@ -16,9 +16,8 @@
 	<form action="/services/todo-list/todo-api/{todo.uid}.json?_method=delete" method="post">
 		<button aria-label="Delete todo" class="delete" />
 	</form>
-</div>
-
-<!-- <script lang="ts">
+</div> -->
+<script lang="ts">
 	import { enhance } from '$lib/actions/form';
 	export let todo: Todo;
 	export let processDeletedTodoResult: (res: Response) => void;
@@ -27,7 +26,7 @@
 
 <div class="todo" class:done={todo.done}>
 	<form
-		action="/todos/{todo.uid}.json?_method=patch"
+		action="/services/todo-list/todo-api/{todo.uid}.json?_method=patch"
 		method="post"
 		use:enhance={{
 			result: processUpdatedTodoResult
@@ -38,7 +37,7 @@
 	</form>
 
 	<form
-		action="/todos/{todo.uid}.json?_method=patch"
+		action="/services/todo-list/todo-api/{todo.uid}.json?_method=patch"
 		method="post"
 		class="text"
 		use:enhance={{
@@ -50,7 +49,7 @@
 	</form>
 
 	<form
-		action="/todos/{todo.uid}.json?_method=delete"
+		action="/services/todo-list/todo-api/{todo.uid}.json?_method=delete"
 		method="post"
 		use:enhance={{
 			result: processDeletedTodoResult
@@ -58,7 +57,8 @@
 	>
 		<button aria-label="Delete todo" class="delete" />
 	</form>
-</div> -->
+</div>
+
 <style>
 	.todo {
 		display: grid;

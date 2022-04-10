@@ -1,4 +1,4 @@
-<script context="module" lang="ts">
+<!-- <script context="module" lang="ts">
 	import type { Load } from '@sveltejs/kit';
 
 	export const load: Load = async ({ fetch }) => {
@@ -38,13 +38,12 @@
 
 {#each todos as todo}
 	<TodoItem {todo} />
-{/each}
-
-<!-- <script lang="ts" context="module">
+{/each} -->
+<script lang="ts" context="module">
 	import type { Load } from '@sveltejs/kit';
 	import { enhance } from '$lib/actions/form';
 	export const load: Load = async ({ fetch }) => {
-		const res = await fetch('/services/todo/todos.json');
+		const res = await fetch('/services/todo-list/todo-api.json');
 		if (res.ok) {
 			const todos = await res.json();
 			return {
@@ -84,7 +83,7 @@
 	<h1>{title}</h1>
 
 	<form
-		action="/todos.json"
+		action="/services/todo-list/todo-api.json"
 		method="post"
 		class="new"
 		use:enhance={{
@@ -103,7 +102,8 @@
 			{processUpdatedTodoResult}
 		/>
 	{/each}
-</div> -->
+</div>
+
 <style>
 	.todos {
 		width: 100%;

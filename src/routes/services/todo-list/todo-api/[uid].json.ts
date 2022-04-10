@@ -1,25 +1,24 @@
+import PrismaClient from '$lib/prisma';
 import type { RequestHandler } from '@sveltejs/kit';
 
-import { todos } from './_todos';
+const prisma = new PrismaClient();
 
-export const get = (request) => {
-	console.log(request.params.uid);
-};
+// import { todos } from './_todos';
 
-export const del: RequestHandler = async ({ params }) => {
-	// const status = 200;
-	// let body = {};
+// export const get = (request) => {
+// 	console.log(request.params.uid);
+// };
 
-	todos = todos.filter((todo) => todo.uid !== params.uid);
+export const del: RequestHandler = async ({ request, params }) => {
+	const res = await request.formData();
 
-	// const res = await request.formData();
+	const body = await prisma.todo.delete({
+		where: {
+			uid: params.uid
+		}
+	});
 
-	// body = await prisma.todo.delete({
-	// 	where: {
-	// 		uid: request.params.uid
-	// 	}
-	// });
-
+	// todos.filter((todo) => todo.uid !== params.uid);
 
 	return {
 		status: 303,
@@ -29,12 +28,27 @@ export const del: RequestHandler = async ({ params }) => {
 	};
 };
 
-// export const patch: RequestHandler = async ({ request }) => {
-// 	const status = 200;
-// 	const res = await request.formData();
+export const patch: RequestHandler = async ({ request, params }) => {
+	const res = await request.formData();
+	const data = {
+		text: res.has('text') ? res.get('text') : undefined,
+		done: res.has('done') ? !!res.get('done') : undefined
+	};
 
-// 	return api(res, {
-// 		text: res.has('text') ? res.get('text') : undefined,
-// 		done: res.has('done') ? !!res.get('done') : undefined
-// 	});
-// };
+	const body = await prisma.todo.update({
+		where: {
+			uid: params.uid
+		},
+		data: {
+			done: data.done as boolean,
+			text: data.text as string
+		}
+	});
+
+	return {
+		status: 303,
+		headers: {
+			location: '/services/todo-list/'
+		}
+	};
+};
