@@ -1,13 +1,34 @@
 import type { RequestHandler } from '@sveltejs/kit';
 import { api } from './_api';
 
-export const del: RequestHandler = (request) => {
-	return api(request);
+export const get = (request) => {
+	console.log(request.params.uid);
 };
 
-export const patch: RequestHandler<Request, FormData> = (request) => {
-	return api(request, {
-		text: request.body.has('text') ? request.body.get('text') : undefined,
-		done: request.body.has('done') ? !!request.body.get('done') : undefined
+export const del: RequestHandler = async ({ request }) => {
+	const status = 200;
+	let body = {};
+
+	const res = await request.formData();
+
+	body = await prisma.todo.delete({
+		where: {
+			uid: request.params.uid
+		}
+	});
+
+	return {
+		status,
+		body
+	};
+};
+
+export const patch: RequestHandler = async ({ request }) => {
+	const status = 200;
+	const res = await request.formData();
+
+	return api(res, {
+		text: res.has('text') ? res.get('text') : undefined,
+		done: res.has('done') ? !!res.get('done') : undefined
 	});
 };
