@@ -1,5 +1,5 @@
 export const todoReqReturn = (request: Request, status, body) => {
-    console.debug(`AJAX ${request.method}`)
+    console.debug(`AJAX ${request.method} request`)
     if (request.method === 'GET' || request.headers.get('accept') === 'application/json') {
         return {
             status,
