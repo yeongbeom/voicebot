@@ -1,23 +1,26 @@
 import PrismaClient from '$lib/prisma';
 import type { RequestHandler } from '@sveltejs/kit';
+import { todoReqReturn } from './_api';
 
 const prisma = new PrismaClient();
 
-export const get: RequestHandler = async () => {
-	const status = 200;
-	const body = await prisma.todo.findMany();
+let status = 500;
+let body = {};
 
-	return {
-		status,
-		body
-	};
+
+export const get: RequestHandler = async ({ request }) => {
+	status = 200;
+	body = await prisma.todo.findMany();
+
+	return todoReqReturn(request, status, body)
 };
 
 export const post: RequestHandler = async ({ request }) => {
 	const res = await request.formData();
 	const todoPost = res.get('add-todo');
 
-	const body = await prisma.todo.create({
+	status = 200;
+	body = await prisma.todo.create({
 		data: {
 			created_at: new Date() as Date,
 			text: todoPost as string,
@@ -25,10 +28,5 @@ export const post: RequestHandler = async ({ request }) => {
 		}
 	});
 
-	return {
-		status: 303,
-		headers: {
-			location: '/services/todo-list/'
-		}
-	};
+	return todoReqReturn(request, status, body)
 };

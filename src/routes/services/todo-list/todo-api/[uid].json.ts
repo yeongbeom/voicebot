@@ -1,23 +1,23 @@
 import PrismaClient from '$lib/prisma';
 import type { RequestHandler } from '@sveltejs/kit';
+import { todoReqReturn } from './_api';
 
 const prisma = new PrismaClient();
 
-export const del: RequestHandler = async ({ request, params }) => {
-	const res = await request.formData();
+let status = 500;
+let body = {};
 
-	const body = await prisma.todo.delete({
+
+export const del: RequestHandler = async ({ request, params }) => {
+	status = 200;
+	body = await prisma.todo.delete({
 		where: {
 			uid: params.uid
 		}
 	});
 
-	return {
-		status: 303,
-		headers: {
-			location: '/services/todo-list/'
-		}
-	};
+	return todoReqReturn(request, status, body);
+
 };
 
 export const patch: RequestHandler = async ({ request, params }) => {
@@ -27,7 +27,8 @@ export const patch: RequestHandler = async ({ request, params }) => {
 		done: res.has('done') ? !!res.get('done') : undefined
 	};
 
-	const body = await prisma.todo.update({
+	status = 200;
+	body = await prisma.todo.update({
 		where: {
 			uid: params.uid
 		},
@@ -37,10 +38,5 @@ export const patch: RequestHandler = async ({ request, params }) => {
 		}
 	});
 
-	return {
-		status: 303,
-		headers: {
-			location: '/services/todo-list/'
-		}
-	};
+	return todoReqReturn(request, status, body);
 };
