@@ -7,12 +7,12 @@
 	// audio data conversion setup
 	let base64data;
 
-	const audioLetency = 200; // TODO: optimize value
-
 	let chunks = [];
 
 	onMount(() => {
 		console.log('talk.svelte mounted');
+
+		const audioCtx = new AudioContext();
 
 		const reader = new FileReader();
 		const gnSpeechRecognition = (mediaRecorder) => {
@@ -130,18 +130,37 @@
 					})
 						.then((response) => response.json())
 						.then((data) => {
-							let snd = new Audio(data.audio);
-
-							snd.onended = () => {
-								setTimeout(() => {
-									$currentStatus = $status.idle;
-								}, audioLetency);
+							const synthesize_url = 'https://kakaoi-newtone-openapi.kakao.com/v1/synthesize';
+							const rest_api_key = 'b37f820cbbc5e27de9dd442ac1e6f0b6';
+							const headers_synth = {
+								'Content-Type': 'application/xml',
+								Authorization: `KakaoAK ${rest_api_key}`
 							};
 
-							$currentExpression = data.emotion;
-							$currentStatus = $status.talking;
-							$say = data.text;
-							snd.play();
+							const synth_in = `<speak> <voice name='WOMAN_DIALOG_BRIGHT'> ${data.text} </voice> </speak>`;
+
+							fetch(synthesize_url, {
+								method: 'POST',
+								headers: headers_synth,
+								body: JSON.stringify({
+									data: synth_in
+								})
+							})
+								.then((response) => response.arrayBuffer())
+								.then((audioData) => {
+									audioCtx.decodeAudioData(audioData, (buffer) => {
+										const audioSource = audioCtx.createBufferSource();
+										audioSource.addEventListener('ended', () => {
+											$currentStatus = $status.idle;
+										});
+										audioSource.buffer = buffer;
+										audioSource.connect(audioCtx.destination);
+										audioSource.start(0);
+									});
+									$currentExpression = data.emotion;
+									$currentStatus = $status.talking;
+									$say = data.text;
+								});
 						})
 						.catch((err) => {
 							console.error(err);

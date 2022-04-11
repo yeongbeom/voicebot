@@ -18,6 +18,6 @@ const pathOffer = 'offer';
 
 export const endpoints = readable({
 	offerLocalEndpoint: `${protocol}://${gnictHost}:${gnictProcPort}/${pathOffer}`,
-	talkEndpoint: `${protocol}://${gnictHost}:${gnictProcPort}/${pathTalk}`,
+	talkEndpoint: `${protocol}://${ketiHost}:${ketiPort}/${pathTalk}`,
 	offerRemoteEndpoint: `${protocol}://${ketiHost}:${ketiPort}/${pathOffer}`
 });
