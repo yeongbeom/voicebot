@@ -12,6 +12,7 @@
 			<a href="/">Main</a>
 			<a href="/settings">Settings</a>
 			<a href="/services/todo-list">Todo</a>
+			<a href="/tests/speed">Test speed</a>
 			<a href="/tests/voicebot">Test voicebot</a>
 			<a href="/tests/font">Test font</a>
 			<a href="/tests/webrtc">Test WebRTC</a>
