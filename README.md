@@ -1,3 +1,5 @@
+<img src='docs/system-diagram.png' alt='system diagram' width='500'>
+
 # Requirements
 
 - Chromium-based browser
