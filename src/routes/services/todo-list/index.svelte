@@ -3,15 +3,17 @@
 	import { enhance } from '$lib/actions/form';
 	export const load: Load = async ({ fetch }) => {
 		const res = await fetch('/services/todo-list/todo-api.json');
-		if (res.ok) {
-			const todos = await res.json();
+
+		if (!res.ok) {
+			const { message } = await res.json();
 			return {
-				props: { todos }
+				error: new Error(message)
 			};
 		}
-		const { message } = await res.json();
+
+		const todos = await res.json();
 		return {
-			error: new Error(message)
+			props: { todos }
 		};
 	};
 </script>
