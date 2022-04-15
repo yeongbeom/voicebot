@@ -12,6 +12,7 @@ export const currentStatus = writable('init');
 export const expression = readable({
 	neutral: 'neutral',
 	happiness: 'happiness',
+	happy: 'happiness',
 	disgust: 'disgust',
 	surprise: 'surprise',
 	anger: 'anger',

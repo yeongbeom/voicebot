@@ -1,6 +1,13 @@
 <script lang="ts">
 	import { onMount, onDestroy } from 'svelte';
-	import { currentStatus, say, heard, status, currentExpression } from '$lib/stores/bot';
+	import {
+		currentStatus,
+		say,
+		heard,
+		status,
+		currentExpression,
+		expression
+	} from '$lib/stores/bot';
 	import { endpoints } from '$lib/stores/endpoints';
 	import { debugMode } from '$lib/stores/config';
 
@@ -173,7 +180,8 @@
 						audioSource.connect(audioCtx.destination);
 						audioSource.start(0);
 					});
-					$currentExpression = empathyRes.emotion;
+					$currentExpression = $expression[`${empathyRes.emotion}`];
+
 					$currentStatus = $status.talking;
 					$say = empathyRes.text;
 				};
