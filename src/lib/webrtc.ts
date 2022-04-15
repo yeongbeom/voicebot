@@ -16,7 +16,7 @@ const genDomElem = (name = '') => {
 	};
 };
 
-const webrtcStart = (offerEndpoint, webrtcParams, debugMode, domElem) => {
+const webrtcStart = (offerEndpoint, webrtcParams, debugMode, domElem, userId) => {
 	let dcInterval;
 
 	const pc = createPeerConnection(webrtcParams['use-stun'], debugMode, domElem);
@@ -81,14 +81,14 @@ const webrtcStart = (offerEndpoint, webrtcParams, debugMode, domElem) => {
 				stream.getTracks().forEach(function (track) {
 					pc.addTrack(track, stream);
 				});
-				return negotiate(pc, webrtcParams, offerEndpoint, debugMode, domElem);
+				return negotiate(pc, webrtcParams, offerEndpoint, debugMode, domElem, userId);
 			},
 			function (err) {
 				console.error('Could not acquire media: ' + err);
 			}
 		);
 	} else {
-		negotiate(pc, webrtcParams, offerEndpoint, debugMode, domElem);
+		negotiate(pc, webrtcParams, offerEndpoint, debugMode, domElem, userId);
 	}
 
 	return { pc, dc };
@@ -173,7 +173,7 @@ const createPeerConnection = (useStun, debugMode, domElem) => {
 	return pc;
 };
 
-const negotiate = (pc, webrtcParams, offerEndpoint, debugMode, domElem) => {
+const negotiate = (pc, webrtcParams, offerEndpoint, debugMode, domElem, userId) => {
 	return pc
 		.createOffer()
 		.then(function (offer) {
@@ -213,10 +213,13 @@ const negotiate = (pc, webrtcParams, offerEndpoint, debugMode, domElem) => {
 				domElem.offerSdp.textContent = offer.sdp;
 			}
 
+			console.debug(`negotiate ${userId}`)
+
 			return fetch(offerEndpoint, {
 				body: JSON.stringify({
 					sdp: offer.sdp,
 					type: offer.type,
+					uid: userId,
 					video_transform: webrtcParams['video-transform']
 				}),
 				headers: {

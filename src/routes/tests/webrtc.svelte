@@ -15,6 +15,8 @@
 	};
 	let webrtcLocal, webrtcRemote;
 
+	const userId = 'temp-id'; // [TODO] connect to db
+
 	onMount(() => {
 		try {
 			// get DOM elements
@@ -25,13 +27,15 @@
 				$endpoints.offerLocalEndpoint,
 				webrtcParams,
 				$debugMode,
-				domElemLocal
+				domElemLocal,
+				userId
 			);
 			webrtcRemote = webrtcStart(
 				$endpoints.offerRemoteEndpoint,
 				webrtcParams,
 				$debugMode,
-				domElemRemote
+				domElemRemote,
+				userId
 			);
 			domElemLocal.startBtn.style.display = 'none';
 			domElemLocal.stopBtn.style.display = 'inline-block';
