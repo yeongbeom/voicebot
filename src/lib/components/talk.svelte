@@ -31,7 +31,7 @@
 		return await res.arrayBuffer();
 	};
 
-	const fetchEmpathyData = async (base64data: string) => {
+	const fetchEmpathyData = async (base64data) => {
 		const empahtyReq: EmpathyReq = {
 			audio: base64data,
 			text: $heard,
