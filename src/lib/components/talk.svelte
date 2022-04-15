@@ -4,9 +4,6 @@
 	import { endpoints } from '$lib/stores/endpoints';
 	import { debugMode } from '$lib/stores/config';
 
-	// audio data conversion setup
-	let base64data;
-
 	let chunks = [];
 
 	onMount(() => {
@@ -45,6 +42,27 @@
 			$currentExpression = empathyData.emotion;
 			$currentStatus = $status.talking;
 			$say = empathyData.text;
+		};
+
+		const fetchEmpathyData = async (base64data) => {
+			const res = await fetch($endpoints.talkEndpoint, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({
+					audio: base64data,
+					text: $heard
+				})
+			});
+
+			if (!res.ok) {
+				const message = await res.text();
+				throw new Error(message);
+			}
+
+			const empathyData = await res.json();
+			fetchSttResult(empathyData);
 		};
 
 		console.log('talk.svelte mounted');
@@ -153,25 +171,8 @@
 				};
 
 				reader.onloadend = () => {
-					base64data = reader.result;
-
-					fetch($endpoints.talkEndpoint, {
-						method: 'POST',
-						headers: {
-							'Content-Type': 'application/json'
-						},
-						body: JSON.stringify({
-							audio: base64data,
-							text: $heard
-						})
-					})
-						.then((response) => response.json())
-						.then((empathyData) => {
-							fetchSttResult(empathyData);
-						})
-						.catch((err) => {
-							console.error(err);
-						});
+					const base64data = reader.result;
+					fetchEmpathyData(base64data);
 				};
 			} catch (err) {
 				console.error(err);
