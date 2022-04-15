@@ -276,7 +276,7 @@
 			d: [{ value: expressionPath.l_eyebrow }]
 		});
 
-		// TODO: insert mouse_color property to the paths
+		// [TODO] insert mouse_color property to the paths
 		let mouse_color = '';
 
 		if (expressionPath.expression === 'anger') {
@@ -296,7 +296,7 @@
 			fill: [{ value: mouse_color }]
 		});
 
-		// TODO: anime
+		// [TODO] anime
 		anime
 			.timeline({
 				duration: 200

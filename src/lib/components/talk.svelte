@@ -52,7 +52,8 @@
 				},
 				body: JSON.stringify({
 					audio: base64data,
-					text: $heard
+					text: $heard,
+					uid: 'temp-uid' // [TODO] connect to db
 				})
 			});
 
