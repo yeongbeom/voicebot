@@ -10,6 +10,43 @@
 	let chunks = [];
 
 	onMount(() => {
+		const fetchSttResult = async (empathyData) => {
+			const synthesize_url = 'https://kakaoi-newtone-openapi.kakao.com/v1/synthesize';
+			const rest_api_key = 'b37f820cbbc5e27de9dd442ac1e6f0b6';
+			const headers_synth = {
+				'Content-Type': 'application/xml',
+				Authorization: `KakaoAK ${rest_api_key}`
+			};
+			const synth_in = `<speak> <voice name='WOMAN_DIALOG_BRIGHT'> ${empathyData.text} </voice> </speak>`;
+
+			const res = await fetch(synthesize_url, {
+				method: 'POST',
+				headers: headers_synth,
+				body: JSON.stringify({
+					data: synth_in
+				})
+			});
+
+			if (!res.ok) {
+				const message = await res.text();
+				throw new Error(message);
+			}
+
+			const audioData = await res.arrayBuffer();
+			audioCtx.decodeAudioData(audioData, (buffer) => {
+				const audioSource = audioCtx.createBufferSource();
+				audioSource.addEventListener('ended', () => {
+					$currentStatus = $status.idle;
+				});
+				audioSource.buffer = buffer;
+				audioSource.connect(audioCtx.destination);
+				audioSource.start(0);
+			});
+			$currentExpression = empathyData.emotion;
+			$currentStatus = $status.talking;
+			$say = empathyData.text;
+		};
+
 		console.log('talk.svelte mounted');
 
 		const audioCtx = new AudioContext();
@@ -129,38 +166,8 @@
 						})
 					})
 						.then((response) => response.json())
-						.then((data) => {
-							const synthesize_url = 'https://kakaoi-newtone-openapi.kakao.com/v1/synthesize';
-							const rest_api_key = 'b37f820cbbc5e27de9dd442ac1e6f0b6';
-							const headers_synth = {
-								'Content-Type': 'application/xml',
-								Authorization: `KakaoAK ${rest_api_key}`
-							};
-
-							const synth_in = `<speak> <voice name='WOMAN_DIALOG_BRIGHT'> ${data.text} </voice> </speak>`;
-
-							fetch(synthesize_url, {
-								method: 'POST',
-								headers: headers_synth,
-								body: JSON.stringify({
-									data: synth_in
-								})
-							})
-								.then((response) => response.arrayBuffer())
-								.then((audioData) => {
-									audioCtx.decodeAudioData(audioData, (buffer) => {
-										const audioSource = audioCtx.createBufferSource();
-										audioSource.addEventListener('ended', () => {
-											$currentStatus = $status.idle;
-										});
-										audioSource.buffer = buffer;
-										audioSource.connect(audioCtx.destination);
-										audioSource.start(0);
-									});
-									$currentExpression = data.emotion;
-									$currentStatus = $status.talking;
-									$say = data.text;
-								});
+						.then((empathyData) => {
+							fetchSttResult(empathyData);
 						})
 						.catch((err) => {
 							console.error(err);
