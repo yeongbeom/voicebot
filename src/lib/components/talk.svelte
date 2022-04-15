@@ -7,14 +7,14 @@
 	let chunks = [];
 
 	onMount(() => {
-		const fetchSttResult = async (empathyData) => {
+		const fetchSttResult = async (empathyRes: EmpathyRes) => {
 			const synthesize_url = 'https://kakaoi-newtone-openapi.kakao.com/v1/synthesize';
 			const rest_api_key = 'b37f820cbbc5e27de9dd442ac1e6f0b6';
 			const headers_synth = {
 				'Content-Type': 'application/xml',
 				Authorization: `KakaoAK ${rest_api_key}`
 			};
-			const synth_in = `<speak> <voice name='WOMAN_DIALOG_BRIGHT'> ${empathyData.text} </voice> </speak>`;
+			const synth_in = `<speak> <voice name='WOMAN_DIALOG_BRIGHT'> ${empathyRes.text} </voice> </speak>`;
 
 			const res = await fetch(synthesize_url, {
 				method: 'POST',
@@ -39,22 +39,23 @@
 				audioSource.connect(audioCtx.destination);
 				audioSource.start(0);
 			});
-			$currentExpression = empathyData.emotion;
+			$currentExpression = empathyRes.emotion;
 			$currentStatus = $status.talking;
-			$say = empathyData.text;
+			$say = empathyRes.text;
 		};
 
 		const fetchEmpathyData = async (base64data) => {
+			const empahtyReq: EmpathyReq = {
+				audio: base64data,
+				text: $heard,
+				uid: 'temp-uid' // [TODO] connect to db
+			};
 			const res = await fetch($endpoints.talkEndpoint, {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json'
 				},
-				body: JSON.stringify({
-					audio: base64data,
-					text: $heard,
-					uid: 'temp-uid' // [TODO] connect to db
-				})
+				body: JSON.stringify(empahtyReq)
 			});
 
 			if (!res.ok) {
@@ -62,8 +63,7 @@
 				throw new Error(message);
 			}
 
-			const empathyData = await res.json();
-			fetchSttResult(empathyData);
+			return await res.json();
 		};
 
 		console.log('talk.svelte mounted');
@@ -173,7 +173,9 @@
 
 				reader.onloadend = () => {
 					const base64data = reader.result;
-					fetchEmpathyData(base64data);
+					fetchEmpathyData(base64data).then((empathyRes) => {
+						fetchSttResult(empathyRes);
+					});
 				};
 			} catch (err) {
 				console.error(err);

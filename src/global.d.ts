@@ -6,3 +6,14 @@ type Todo = {
 	text: string;
 	done: boolean;
 };
+
+type EmpathyRes = {
+	emotion: string,
+	text: string,
+}
+
+type EmpathyReq = {
+	audio: string,
+	text: string,
+	uid: string
+}
