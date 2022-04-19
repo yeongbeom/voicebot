@@ -216,13 +216,15 @@
 		$currentStatus === $status.idle;
 		console.debug('status reset to idle');
 
-		if (mediaRecorder !== undefined) mediaRecorder.stop();
-		if (recognition !== undefined) recognition.stop();
+		if (mediaRecorder !== null) mediaRecorder.stop();
+		if (recognition !== null) recognition.stop();
 
-		stream
-			.getTracks() // get all tracks from the MediaStream
-			.forEach((track) => track.stop()); // stop each of them
-		console.debug('stream stopped');
+		if (stream !== null) {
+			stream
+				.getTracks() // get all tracks from the MediaStream
+				.forEach((track) => track.stop()); // stop each of them
+			console.debug('stream stopped');
+		}
 	});
 </script>
 
