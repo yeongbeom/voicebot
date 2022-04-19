@@ -11,7 +11,13 @@
 	import { endpoints } from '$lib/stores/endpoints';
 	import { debugMode } from '$lib/stores/config';
 
+	let active = false;
+
 	let chunks = [];
+
+	let recognition = null;
+	let mediaRecorder = null;
+	let stream = null;
 
 	const fetchSttData = async (empathyRes: EmpathyRes) => {
 		const synthesize_url = 'https://kakaoi-newtone-openapi.kakao.com/v1/synthesize';
@@ -61,7 +67,8 @@
 	};
 
 	onMount(() => {
-		console.log('talk.svelte mounted');
+		console.debug('talk.svelte mounted');
+		active = true;
 
 		const audioCtx = new AudioContext();
 
@@ -69,14 +76,17 @@
 		const gnSpeechRecognition = (mediaRecorder) => {
 			if ((window as any).SpeechRecognition || (window as any).webkitSpeechRecognition) {
 				// @ts-ignore
-				const recognition = new webkitSpeechRecognition() || new SpeechRecognition();
+				recognition = new webkitSpeechRecognition() || new SpeechRecognition();
 
 				recognition.lang = 'ko-KR';
 				recognition.interimResults = true;
 
 				recognition.onstart = () => {
+					console.debug('Speech recognition started');
+
 					if ($currentStatus === $status.idle) {
 						mediaRecorder.start();
+						console.debug('Media recorder started');
 					} else {
 						setTimeout(() => {
 							recognition.stop();
@@ -108,15 +118,19 @@
 				// };
 
 				recognition.onend = () => {
-					if (mediaRecorder.state === 'recording') {
-						mediaRecorder.stop();
-					}
+					console.debug('Speech recognition ended');
 
-					if ($currentStatus === $status.listening) {
-						$currentStatus = $status.thinking;
-					}
+					if (active) {
+						if (mediaRecorder.state === 'recording') {
+							mediaRecorder.stop();
+						}
 
-					recognition.start();
+						if ($currentStatus === $status.listening) {
+							$currentStatus = $status.thinking;
+						}
+
+						recognition.start();
+					}
 				};
 
 				recognition.start();
@@ -130,11 +144,9 @@
 				audio: true
 			};
 
-			let stream = null;
-
 			try {
 				stream = await navigator.mediaDevices.getUserMedia(constraints);
-				const mediaRecorder = new MediaRecorder(stream);
+				mediaRecorder = new MediaRecorder(stream);
 
 				gnSpeechRecognition(mediaRecorder);
 
@@ -143,6 +155,8 @@
 				};
 
 				mediaRecorder.onstop = (e) => {
+					console.debug('Media recorder ended');
+
 					if ($currentStatus === $status.thinking) {
 						const soundClips = document.querySelector('.sound-clips');
 						const blob = new Blob(chunks, {
@@ -194,8 +208,21 @@
 		$say = '안녕하세요';
 		talk();
 	});
+
 	onDestroy(() => {
-		console.log('talk.svelte destroyed');
+		console.debug('talk.svelte destroyed');
+		active = false;
+
+		$currentStatus === $status.idle;
+		console.debug('status reset to idle');
+
+		if (mediaRecorder !== undefined) mediaRecorder.stop();
+		if (recognition !== undefined) recognition.stop();
+
+		stream
+			.getTracks() // get all tracks from the MediaStream
+			.forEach((track) => track.stop()); // stop each of them
+		console.debug('stream stopped');
 	});
 </script>
 
