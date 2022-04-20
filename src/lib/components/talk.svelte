@@ -146,6 +146,7 @@
 
 			try {
 				stream = await navigator.mediaDevices.getUserMedia(constraints);
+				console.debug('VAD:', stream);
 				mediaRecorder = new MediaRecorder(stream);
 
 				gnSpeechRecognition(mediaRecorder);

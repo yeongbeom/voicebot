@@ -1,21 +1,5 @@
 // public functions
 
-const genDomElem = (name = '') => {
-	return {
-		startBtn: document.getElementById(`start${name}`),
-		stopBtn: document.getElementById(`stop${name}`),
-		mediaDiv: document.getElementById(`media${name}`),
-		dataChannelLog: document.getElementById(`data-channel${name}`),
-		iceConnectionLog: document.getElementById(`ice-connection-state${name}`),
-		iceGatheringLog: document.getElementById(`ice-gathering-state${name}`),
-		signalingLog: document.getElementById(`signaling-state${name}`),
-		webrtcVideo: document.getElementById(`webrtc-video${name}`),
-		webrtcAudio: document.getElementById(`webrtc-audio${name}`),
-		offerSdp: document.getElementById(`offer-sdp${name}`),
-		answerSdp: document.getElementById(`answer-sdp${name}`)
-	};
-};
-
 const webrtcStart = (offerEndpoint, webrtcParams, debugMode, domElem, userId) => {
 	let dcInterval;
 
@@ -78,6 +62,7 @@ const webrtcStart = (offerEndpoint, webrtcParams, debugMode, domElem, userId) =>
 		}
 		navigator.mediaDevices.getUserMedia(constraints).then(
 			function (stream) {
+				console.debug('WebRTC:', stream);
 				stream.getTracks().forEach(function (track) {
 					pc.addTrack(track, stream);
 				});
@@ -213,7 +198,7 @@ const negotiate = (pc, webrtcParams, offerEndpoint, debugMode, domElem, userId) 
 				domElem.offerSdp.textContent = offer.sdp;
 			}
 
-			console.debug(`negotiate ${userId}`)
+			console.debug(`negotiate ${userId}`);
 
 			return fetch(offerEndpoint, {
 				body: JSON.stringify({
@@ -303,4 +288,4 @@ const escapeRegExp = (string) => {
 	return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
 };
 
-export { genDomElem, webrtcStart, webrtcStop };
+export { webrtcStart, webrtcStop };

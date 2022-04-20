@@ -1,13 +1,14 @@
 <script lang="ts">
 	import { debugMode } from '$lib/stores/config';
 	import { endpoints } from '$lib/stores/endpoints';
-	import { genDomElem, webrtcStart, webrtcStop } from '$lib/webrtc';
+	import { webrtcStart, webrtcStop } from '$lib/webrtc';
 	import { onDestroy, onMount } from 'svelte';
 
 	const webrtcParams = {
 		'datachannel-parameters': '{"ordered": true}',
 		'audio-codec': 'opus/48000/2',
 		'use-video': 'on',
+		'use-audio': 'on',
 		'video-resolution': '320x240',
 		'video-transform': 'none',
 		'video-codec': 'H264/90000',
@@ -18,11 +19,25 @@
 	const userId = 'temp-id'; // [TODO] connect to db
 
 	onMount(() => {
-		try {
-			// get DOM elements
-			const domElemLocal = genDomElem('-local');
-			const domElemRemote = genDomElem('-remote');
+		const genDomElem = (name = '') => {
+			return {
+				startBtn: document.getElementById(`start${name}`),
+				stopBtn: document.getElementById(`stop${name}`),
+				mediaDiv: document.getElementById(`media${name}`),
+				dataChannelLog: document.getElementById(`data-channel${name}`),
+				iceConnectionLog: document.getElementById(`ice-connection-state${name}`),
+				iceGatheringLog: document.getElementById(`ice-gathering-state${name}`),
+				signalingLog: document.getElementById(`signaling-state${name}`),
+				webrtcVideo: document.getElementById(`webrtc-video${name}`),
+				webrtcAudio: document.getElementById(`webrtc-audio${name}`),
+				offerSdp: document.getElementById(`offer-sdp${name}`),
+				answerSdp: document.getElementById(`answer-sdp${name}`)
+			};
+		};
+		const domElemLocal = genDomElem('-local');
+		const domElemRemote = genDomElem('-remote');
 
+		try {
 			webrtcLocal = webrtcStart(
 				$endpoints.offerLocalEndpoint,
 				webrtcParams,
