@@ -2,7 +2,7 @@
 	import type { Load } from '@sveltejs/kit';
 	import { enhance } from '$lib/actions/form';
 	export const load: Load = async ({ fetch }) => {
-		const res = await fetch('/services/todo-list/todo-api.json');
+		const res = await fetch('/services/todo-list/api.json');
 
 		if (!res.ok) {
 			const { message } = await res.json();
@@ -44,7 +44,7 @@
 	<h1>{title}</h1>
 
 	<form
-		action="/services/todo-list/todo-api.json"
+		action="/services/todo-list/api.json"
 		method="post"
 		class="new"
 		use:enhance={{

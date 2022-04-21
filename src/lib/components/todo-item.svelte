@@ -7,7 +7,7 @@
 
 <div class="todo" class:done={todo.done}>
 	<form
-		action="/services/todo-list/todo-api/{todo.uid}.json?_method=patch"
+		action="/services/todo-list/api/{todo.uid}.json?_method=patch"
 		method="post"
 		use:enhance={{
 			result: processUpdatedTodoResult
@@ -18,7 +18,7 @@
 	</form>
 
 	<form
-		action="/services/todo-list/todo-api/{todo.uid}.json?_method=patch"
+		action="/services/todo-list/api/{todo.uid}.json?_method=patch"
 		method="post"
 		class="text"
 		use:enhance={{
@@ -30,7 +30,7 @@
 	</form>
 
 	<form
-		action="/services/todo-list/todo-api/{todo.uid}.json?_method=delete"
+		action="/services/todo-list/api/{todo.uid}.json?_method=delete"
 		method="post"
 		use:enhance={{
 			result: processDeletedTodoResult
