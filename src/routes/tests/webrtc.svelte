@@ -5,12 +5,23 @@
 	import { onDestroy, onMount } from 'svelte';
 
 	const webrtcParams = {
+		'use-datachannel': 'on',
 		'datachannel-parameters': '{"ordered": true}',
 		'audio-codec': 'opus/48000/2',
 		'use-video': 'on',
 		'use-audio': 'on',
 		'video-resolution': '320x240',
-		'video-transform': 'none',
+		'video-transform': 'edges',
+		'video-codec': 'H264/90000',
+		'use-stun': 'on'
+	};
+
+	const webrtcParamsKeti = {
+		'datachannel-parameters': '{"ordered": true}',
+		'audio-codec': 'opus/48000/2',
+		'use-video': 'on',
+		'video-resolution': '320x240',
+		'video-transform': 'edges',
 		'video-codec': 'H264/90000',
 		'use-stun': 'on'
 	};
@@ -29,9 +40,7 @@
 				iceGatheringLog: document.getElementById(`ice-gathering-state${name}`),
 				signalingLog: document.getElementById(`signaling-state${name}`),
 				webrtcVideo: document.getElementById(`webrtc-video${name}`),
-				webrtcAudio: document.getElementById(`webrtc-audio${name}`),
-				offerSdp: document.getElementById(`offer-sdp${name}`),
-				answerSdp: document.getElementById(`answer-sdp${name}`)
+				webrtcAudio: document.getElementById(`webrtc-audio${name}`)
 			};
 		};
 		const domElemLocal = genDomElem('-local');
@@ -47,7 +56,7 @@
 			);
 			webrtcRemote = webrtcStart(
 				$endpoints.offerRemoteEndpoint,
-				webrtcParams,
+				webrtcParamsKeti,
 				$debugMode,
 				domElemRemote,
 				userId
@@ -94,14 +103,6 @@
 
 		<h2>Data channel</h2>
 		<pre id="data-channel-local" style="height: 200px" />
-
-		<h2>SDP</h2>
-
-		<h3>Offer</h3>
-		<pre id="offer-sdp-local" />
-
-		<h3>Answer</h3>
-		<pre id="answer-sdp-local" />
 	</div>
 	<div class="flex-col">
 		<h1>KETI</h1>
@@ -124,19 +125,15 @@
 
 		<h2>Data channel</h2>
 		<pre id="data-channel-remote" style="height: 200px" />
-
-		<h2>SDP</h2>
-
-		<h3>Offer</h3>
-		<pre id="offer-sdp-remote" />
-
-		<h3>Answer</h3>
-		<pre id="answer-sdp-remote" />
 	</div>
 </div>
 
 <style>
 	.flex-container {
 		display: flex;
+	}
+
+	pre {
+		overflow: scroll;
 	}
 </style>

@@ -6,18 +6,18 @@ const webrtcStart = (offerEndpoint, webrtcParams, debugMode, domElem, userId) =>
 	const pc = createPeerConnection(webrtcParams['use-stun'], debugMode, domElem);
 	let dc;
 
-	let time_start;
-
-	function current_stamp() {
-		if (time_start === undefined) {
-			time_start = new Date().getTime();
-			return 0;
-		} else {
-			return new Date().getTime() - time_start;
-		}
-	}
-
 	if (webrtcParams['use-datachannel']) {
+		let time_start;
+
+		const current_stamp = () => {
+			if (time_start === undefined) {
+				time_start = new Date().getTime();
+				return 0;
+			} else {
+				return new Date().getTime() - time_start;
+			}
+		};
+
 		let parameters = JSON.parse(webrtcParams['datachannel-parameters']);
 
 		dc = pc.createDataChannel('chat', parameters);
@@ -66,14 +66,14 @@ const webrtcStart = (offerEndpoint, webrtcParams, debugMode, domElem, userId) =>
 				stream.getTracks().forEach(function (track) {
 					pc.addTrack(track, stream);
 				});
-				return negotiate(pc, webrtcParams, offerEndpoint, debugMode, domElem, userId);
+				return negotiate(pc, webrtcParams, offerEndpoint, userId);
 			},
 			function (err) {
 				console.error('Could not acquire media: ' + err);
 			}
 		);
 	} else {
-		negotiate(pc, webrtcParams, offerEndpoint, debugMode, domElem, userId);
+		negotiate(pc, webrtcParams, offerEndpoint, userId);
 	}
 
 	return { pc, dc };
@@ -148,7 +148,7 @@ const createPeerConnection = (useStun, debugMode, domElem) => {
 
 	// connect audio / video
 	pc.addEventListener('track', function (evt) {
-		if (evt.track.kind == 'video' && debugMode) {
+		if (evt.track.kind == 'video') {
 			domElem.webrtcVideo.srcObject = evt.streams[0];
 		} else {
 			domElem.webrtcAudio.srcObject = evt.streams[0];
@@ -158,7 +158,7 @@ const createPeerConnection = (useStun, debugMode, domElem) => {
 	return pc;
 };
 
-const negotiate = (pc, webrtcParams, offerEndpoint, debugMode, domElem, userId) => {
+const negotiate = (pc, webrtcParams, offerEndpoint, userId) => {
 	return pc
 		.createOffer()
 		.then(function (offer) {
@@ -194,9 +194,7 @@ const negotiate = (pc, webrtcParams, offerEndpoint, debugMode, domElem, userId) 
 				offer.sdp = sdpFilterCodec('video', codec, offer.sdp);
 			}
 
-			if (debugMode) {
-				domElem.offerSdp.textContent = offer.sdp;
-			}
+			console.debug('WebRTC offer:', offer); // check offer.sdp
 
 			console.debug(`negotiate ${userId}`);
 
@@ -217,9 +215,7 @@ const negotiate = (pc, webrtcParams, offerEndpoint, debugMode, domElem, userId) 
 			return response.json();
 		})
 		.then(function (answer) {
-			if (debugMode) {
-				domElem.answerSdp.textContent = answer.sdp;
-			}
+			console.debug('WebRTC answer:', answer); // check answer.sdp value
 			return pc.setRemoteDescription(answer);
 		})
 		.catch(function (e) {
