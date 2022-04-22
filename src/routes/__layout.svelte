@@ -11,6 +11,7 @@
 		<div class="links">
 			<a href="/">Main</a>
 			<a href="/login">Test login</a>
+			<a href="/register">Test register</a>
 			<a href="/settings">Settings</a>
 			<a href="/services/todo-list">Todo</a>
 			<a href="/tests/speed">Test speed</a>
