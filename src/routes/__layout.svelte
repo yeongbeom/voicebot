@@ -9,7 +9,8 @@
 <header>
 	<nav>
 		<div class="links">
-			<a href="/">Main</a>
+			<a href="/">index</a>
+			<a href="/main">Main</a>
 			<a href="/login">Test login</a>
 			<a href="/register">Test register</a>
 			<a href="/settings">Settings</a>

@@ -22,7 +22,26 @@
 		message = data.message;
 		console.log(message);
 	};
+
+	let emergencyMobile;
 </script>
+
+<h1>Login</h1>
+<form action="/login/api.json" method="post">
+	<div>
+		<label>비상연락망</label>
+		010
+		<input
+			bind:value={emergencyMobile}
+			name="emergency-mobile"
+			data-role="keypad"
+			type="tel"
+			maxlength="8"
+			placeholder="00000000"
+		/>
+	</div>
+	<button>확인</button>
+</form>
 
 <h1>Login</h1>
 <p>{message}</p>
