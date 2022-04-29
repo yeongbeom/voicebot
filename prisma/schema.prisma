@@ -8,9 +8,15 @@ generator client {
     binaryTargets = ["native"]
 }
 
+model Member {
+    uid        String @id @default(cuid())
+    createdAt DateTime
+    emergencyMobile String
+}
+
 model Todo {
     uid        String @id @default(cuid())
-    created_at DateTime
+    createdAt DateTime
     text       String
     done       Boolean
 }

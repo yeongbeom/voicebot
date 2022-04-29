@@ -22,7 +22,7 @@ export const post: RequestHandler = async ({ request }) => {
 	status = 200;
 	body = await prisma.todo.create({
 		data: {
-			created_at: new Date() as Date,
+			createdAt: new Date() as Date,
 			text: todoPost as string,
 			done: false as boolean
 		}

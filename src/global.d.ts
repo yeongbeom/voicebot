@@ -2,7 +2,7 @@
 
 type Todo = {
 	uid: string;
-	created_at: Date;
+	createdAt: Date;
 	text: string;
 	done: boolean;
 };
