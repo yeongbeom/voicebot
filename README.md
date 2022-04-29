@@ -2,6 +2,18 @@
   <img src='docs/diagram.png' alt='system diagram' width='700'>
 </h1>
 
+# Settings
+## Database
+- docker
+```bash
+docker pull postgres
+docker run --name postgres -p 5432:5432 -e POSTGRES_PASSWORD=4321 -d postgres
+```
+- .env file
+```bash
+DATABASE_URL='postgres://postgres:4321@localhost:5432/todos'
+```
+
 # Requirements
 
 - Chromium-based browser
