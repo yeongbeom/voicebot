@@ -1,5 +1,5 @@
 <script lang="ts">
-	import FontBtn from '$lib/components/font-btn.svelte';
+	import FontBtn from '$lib/components/FontBtn.svelte';
 	import { fontSize } from '$lib/stores/ui';
 
 	let clicked = [false, true, false];

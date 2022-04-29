@@ -19,7 +19,7 @@
 </script>
 
 <script lang="ts">
-	import TodoItem from '$lib/components/todo-item.svelte';
+	import TodoItem from '$lib/components/TodoItem.svelte';
 	export let todos: Todo[];
 	const title = 'Todo';
 	const processNewTodoResult = async (res: Response, form: HTMLFormElement) => {

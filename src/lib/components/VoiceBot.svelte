@@ -1,8 +1,8 @@
 <script lang="ts">
 	import BasicExpressions from '$lib/components/expressions/basic.svelte';
-	import SpeechBubble from '$lib/components/speech-bubble.svelte';
-	import Talk from '$lib/components/talk.svelte';
-	import TestBtns from '$lib/components/test-btns.svelte';
+	import SpeechBubble from '$lib/components/SpeechBubble.svelte';
+	import Talk from '$lib/components/Talk.svelte';
+	import TestBtns from '$lib/components/TestBtns.svelte';
 	import { debugMode } from '$lib/stores/config';
 </script>
 
