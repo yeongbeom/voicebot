@@ -26,6 +26,7 @@
     "prettier": "^2.5.1",
     "prettier-plugin-svelte": "^2.5.0",
     "prisma": "^3.12.0",
+    "string-hash": "^1.1.3",
     "svelte": "^3.44.0",
     "svelte-check": "^2.2.6",
     "svelte-preprocess": "^4.10.1",

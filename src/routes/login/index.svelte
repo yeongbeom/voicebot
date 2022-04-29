@@ -7,21 +7,25 @@
 <script lang="ts">
 	export let session;
 	// import { session } from '$app/stores';
-	let message = '';
+	// let message = '';
 
-	const login = async () => {
-		const res = await fetch('/login/api.json', {
-			method: 'POST',
-			body: JSON.stringify({
-				username: 'HShin',
-				password: '4321'
-			})
-		});
+	// const login = async () => {
+	// 	const res = await fetch('/login/api.json', {
+	// 		method: 'POST',
+	// 		body: JSON.stringify({
+	// 			emergencyMobile
+	// 		})
+	// 	});
 
-		const data = await res.json();
-		message = data.message;
-		console.log(message);
-	};
+	// 	const data = await res.json();
+
+	// 	if (data.status === 200) {
+	// 		message = data.message;
+	// 		console.log(message);
+	// 	} else {
+	// 		console.log(data);
+	// 	}
+	// };
 
 	let emergencyMobile;
 </script>
@@ -43,12 +47,12 @@
 	<button>확인</button>
 </form>
 
-<h1>Login</h1>
+<!-- <h1>Login</h1>
 <p>{message}</p>
 
 <button on:click={login}>Login</button>
 
-{JSON.stringify(session)}
+{JSON.stringify(session)} -->
 
 <!-- {JSON.stringify($session)} -->
 <style>

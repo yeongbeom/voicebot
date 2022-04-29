@@ -3,10 +3,17 @@ import type { RequestHandler } from '@sveltejs/kit';
 import * as cookie from 'cookie';
 import { v4 as uuidv4 } from 'uuid';
 
-export const post: RequestHandler = async ({ request }) => {
-	const res = await request.json();
+let status = 500;
+let body = {};
 
-	if (!(res.username === 'HShin' && res.password === '4321')) {
+export const post: RequestHandler = async ({ request }) => {
+	const res = await request.formData();
+	const emergencyMobile = res.get('emergency-mobile');
+
+	status = 200;
+	body = emergencyMobile;
+
+	if (!(emergencyMobile === '00000000')) {
 		console.log('not auth user');
 		return {
 			body: {
@@ -26,7 +33,7 @@ export const post: RequestHandler = async ({ request }) => {
 	};
 
 	return {
-		status: 200,
+		status,
 		headers,
 		body: {
 			message: 'success',

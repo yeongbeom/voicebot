@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { debugMode } from '$lib/stores/config';
 	import { endpoints } from '$lib/stores/endpoints';
 	import { webrtcStart, webrtcStop } from '$lib/webrtc';
 	import { onDestroy, onMount } from 'svelte';
@@ -50,14 +49,12 @@
 			webrtcLocal = webrtcStart(
 				$endpoints.offerLocalEndpoint,
 				webrtcParams,
-				$debugMode,
 				domElemLocal,
 				userId
 			);
 			webrtcRemote = webrtcStart(
 				$endpoints.offerRemoteEndpoint,
 				webrtcParamsKeti,
-				$debugMode,
 				domElemRemote,
 				userId
 			);

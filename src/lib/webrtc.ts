@@ -1,9 +1,9 @@
 // public functions
 
-const webrtcStart = (offerEndpoint, webrtcParams, debugMode, domElem, userId) => {
+const webrtcStart = (offerEndpoint, webrtcParams, domElem, userId) => {
 	let dcInterval;
 
-	const pc = createPeerConnection(webrtcParams['use-stun'], debugMode, domElem);
+	const pc = createPeerConnection(webrtcParams['use-stun'], domElem);
 	let dc;
 
 	if (webrtcParams['use-datachannel']) {
@@ -107,7 +107,7 @@ const webrtcStop = ({ pc, dc }) => {
 
 // private functions
 
-const createPeerConnection = (useStun, debugMode, domElem) => {
+const createPeerConnection = (useStun, domElem) => {
 	let config: any = {
 		sdpSemantics: 'unified-plan'
 	};
@@ -158,6 +158,10 @@ const createPeerConnection = (useStun, debugMode, domElem) => {
 	return pc;
 };
 
+const fetchOffer = async () => {
+
+};
+
 const negotiate = (pc, webrtcParams, offerEndpoint, userId) => {
 	return pc
 		.createOffer()
@@ -194,7 +198,7 @@ const negotiate = (pc, webrtcParams, offerEndpoint, userId) => {
 				offer.sdp = sdpFilterCodec('video', codec, offer.sdp);
 			}
 
-			console.debug('WebRTC offer:', offer); // check offer.sdp
+			// console.debug('WebRTC offer:', offer); // check offer.sdp
 
 			console.debug(`negotiate ${userId}`);
 
