@@ -1,5 +1,5 @@
 <script lang="ts">
-	import BasicExpressions from '$lib/components/expressions/basic.svelte';
+	import BasicExpressions from '$lib/components/expressions/Basic.svelte';
 	import SpeechBubble from '$lib/components/SpeechBubble.svelte';
 	import Talk from '$lib/components/Talk.svelte';
 	import TestBtns from '$lib/components/TestBtns.svelte';
