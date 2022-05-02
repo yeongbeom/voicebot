@@ -1,6 +1,5 @@
 <script lang="ts">
 	import VoiceBot from '$lib/components/VoiceBot.svelte';
-	import ControlFont from '$lib/components/ControlFont.svelte';
 	import { onMount, onDestroy } from 'svelte';
 	import { currentStatus, status } from '$lib/stores/bot';
 
@@ -13,5 +12,4 @@
 	});
 </script>
 
-<ControlFont />
 <VoiceBot />
