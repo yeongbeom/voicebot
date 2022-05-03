@@ -1,3 +1,9 @@
+<script context="module" lang="ts">
+	setInterval(() => {
+		console.debug(process.memoryUsage());
+	}, 1000);
+</script>
+
 <script lang="ts">
 	import VoiceBotTest from '$lib/components/VoiceBotTest.svelte';
 	import { onMount, onDestroy } from 'svelte';
@@ -5,7 +11,7 @@
 	import { debugMode } from '$lib/stores/config';
 
 	onMount(() => {
-		$debugMode = false;
+		$debugMode = true;
 		console.log('voicebot.svelte mounted');
 		$currentStatus = $status.idle;
 	});

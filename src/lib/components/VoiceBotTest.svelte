@@ -1,18 +1,27 @@
 <script lang="ts">
 	import BasicExpressions from '$lib/components/expressions/Basic.svelte';
 	import SpeechBubble from '$lib/components/SpeechBubble.svelte';
-	import Talk from '$lib/components/Talk.svelte';
+	import { debugMode } from '$lib/stores/config';
+	// import Talk from '$lib/components/Talk.svelte';
+	import TestBtns from '$lib/components/TestBtns.svelte';
 </script>
 
 <div class="voicebot">
 	<div class="expressions">
-		<!-- <BasicExpressions /> -->
+		<BasicExpressions />
 	</div>
 	<div class="speech-bubble">
-		<!-- <SpeechBubble /> -->
+		<SpeechBubble />
 	</div>
 </div>
-<Talk />
+
+<!-- <Talk /> -->
+
+{#if $debugMode}
+	<div>
+		<TestBtns />
+	</div>
+{/if}
 
 <style>
 	.voicebot {
