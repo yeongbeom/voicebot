@@ -68,6 +68,10 @@
 
 	onMount(() => {
 		console.debug('talk.svelte mounted');
+		setInterval(() => {
+			console.debug(process.memoryUsage());
+		}, 1000);
+
 		active = true;
 
 		const audioCtx = new AudioContext();
