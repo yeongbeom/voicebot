@@ -10,6 +10,7 @@
 	} from '$lib/stores/bot';
 	import { endpoints } from '$lib/stores/endpoints';
 	import { debugMode } from '$lib/stores/config';
+	import { ttsApiKey } from '$lib/stores/api-keys';
 
 	let active = false;
 
@@ -19,12 +20,11 @@
 	let mediaRecorder = null;
 	let stream = null;
 
-	const fetchSttData = async (empathyRes: EmpathyRes) => {
+	const fetchTtsData = async (empathyRes: EmpathyRes) => {
 		const synthesize_url = 'https://kakaoi-newtone-openapi.kakao.com/v1/synthesize';
-		const rest_api_key = 'b37f820cbbc5e27de9dd442ac1e6f0b6';
 		const headers_synth = {
 			'Content-Type': 'application/xml',
-			Authorization: `KakaoAK ${rest_api_key}`
+			Authorization: `KakaoAK ${$ttsApiKey}`
 		};
 		const synth_in = `<speak> <voice name='WOMAN_DIALOG_BRIGHT'> ${empathyRes.text} </voice> </speak>`;
 
@@ -188,7 +188,7 @@
 				reader.onloadend = async () => {
 					const base64data = reader.result;
 					const empathyRes = await fetchEmpathyData(base64data);
-					const audioData = await fetchSttData(empathyRes);
+					const audioData = await fetchTtsData(empathyRes);
 
 					audioCtx.decodeAudioData(audioData, (buffer) => {
 						const audioSource = audioCtx.createBufferSource();
