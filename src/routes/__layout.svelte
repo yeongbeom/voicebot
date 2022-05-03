@@ -12,6 +12,7 @@
 			<a href="/">index</a>
 			<a href="/main">Main</a>
 			<a href="/login">Test login</a>
+			<a href="/tests/memory-leak">Test memory</a>
 			<a href="/register">Test register</a>
 			<a href="/settings">Settings</a>
 			<a href="/services/todo-list">Todo</a>

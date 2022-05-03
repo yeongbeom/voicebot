@@ -10,7 +10,7 @@ docker pull postgres
 docker run --name postgres -p 5432:5432 -e POSTGRES_PASSWORD=mysecretpassword -d postgres
 ```
 ```
-docker start `docker ps -q -l`  # restart it in the background
+docker start postgres
 ```
 - .env file
 ```bash
