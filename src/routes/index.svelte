@@ -8,7 +8,6 @@
 		$debugMode = false;
 		console.log('all.svelte mounted');
 		$currentStatus = $status.idle;
-		console.log(import.meta.env.VITE_TTS_API_KEY);
 	});
 	onDestroy(() => {
 		console.log('all.svelte destroyed');
