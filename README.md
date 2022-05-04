@@ -2,19 +2,29 @@
   <img src='docs/diagram.png' alt='system diagram' width='700'>
 </h1>
 
-# Settings
-## Database
-- docker
+# Install
+
+## Database (docker)
+
 ```bash
 docker pull postgres
 docker run --name postgres -p 5432:5432 -e POSTGRES_PASSWORD=mysecretpassword -d postgres
 ```
-```
-docker start postgres
-```
-- .env file
+
+## `dotenv` file
+
+Create `.env` file in the project's root directory. Open the file and add the following line of code:
+
 ```bash
 DATABASE_URL='postgres://postgres:mysecretpassword@localhost:5432/database'
+VITE_TTS_API_KEY={apikey}
+```
+
+## npm
+
+```bash
+npm i
+npm run dev
 ```
 
 # Requirements
