@@ -3,8 +3,10 @@
 	import { onMount, onDestroy } from 'svelte';
 	import { currentStatus, status } from '$lib/stores/bot';
 	import WebRtc from './webrtc.svelte';
+	import { debugMode } from '$lib/stores/config';
 
 	onMount(() => {
+		$debugMode = false;
 		console.log('voicebot.svelte mounted');
 		$currentStatus = $status.idle;
 	});
