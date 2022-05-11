@@ -72,6 +72,10 @@
 		active = true;
 
 		const audioCtx = new AudioContext();
+		let audioSource;
+		const setIdle = () => {
+			$currentStatus = $status.idle;
+		};
 
 		const reader = new FileReader();
 		const gnSpeechRecognition = (mediaRecorder) => {
@@ -86,6 +90,9 @@
 					console.debug('Speech recognition started');
 
 					if ($currentStatus === $status.idle) {
+						if (audioSource && audioSource.removeEventListenr) {
+							audioSource.removeEventListenr('ended', setIdle);
+						}
 						mediaRecorder.start();
 						console.debug('Media recorder started');
 					} else {
@@ -188,10 +195,8 @@
 					const audioData = await fetchTtsData(empathyRes);
 
 					audioCtx.decodeAudioData(audioData, (buffer) => {
-						const audioSource = audioCtx.createBufferSource();
-						audioSource.addEventListener('ended', () => {
-							$currentStatus = $status.idle;
-						});
+						audioSource = audioCtx.createBufferSource();
+						audioSource.addEventListener('ended', setIdle);
 						audioSource.buffer = buffer;
 						audioSource.connect(audioCtx.destination);
 						audioSource.start(0);
