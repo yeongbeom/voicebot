@@ -126,7 +126,7 @@
 				// };
 
 				recognition.onend = () => {
-					console.debug('Speech recognition ended');
+					console.debug('Speech recognition ended', $currentStatus);
 
 					if (active) {
 						if (mediaRecorder.state === 'recording') {
