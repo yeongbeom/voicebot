@@ -13,6 +13,7 @@
 	import { ttsApiKey } from '$lib/stores/api-keys';
 
 	let active = false;
+	let errorNoReason = false;
 
 	let chunks = [];
 
@@ -87,14 +88,14 @@
 				recognition.interimResults = true;
 
 				recognition.onstart = () => {
-					console.debug('Speech recognition started,', $currentStatus);
+					console.debug(`Speech recognition started | ${$currentStatus}`);
 
 					if ($currentStatus === $status.idle) {
 						if (audioSource && audioSource.removeEventListenr) {
 							audioSource.removeEventListenr('ended', setIdle);
 						}
 						mediaRecorder.start();
-						console.debug('Media recorder started,', $currentStatus);
+						console.debug(`Media recorder started | ${$currentStatus}`);
 					} else {
 						setTimeout(() => {
 							recognition.stop();
@@ -121,12 +122,13 @@
 					}
 				};
 
-				// recognition.onerror = () => {
-				//   console.error("Speech Recognition Error");
-				// };
+				recognition.onerror = () => {
+					console.error('Speech Recognition Error');
+					errorNoReason = true;
+				};
 
 				recognition.onend = () => {
-					console.debug('Speech recognition ended,', $currentStatus);
+					console.debug(`Speech recognition ended | ${$currentStatus}`);
 
 					if (active) {
 						if (mediaRecorder.state === 'recording') {
@@ -138,6 +140,12 @@
 						}
 
 						recognition.start();
+					}
+
+					if (errorNoReason) {
+						console.error('Error occurred without reason');
+						// $currentStatus = $status.idle;
+						errorNoReason = false;
 					}
 				};
 
@@ -164,7 +172,7 @@
 				};
 
 				mediaRecorder.onstop = (e) => {
-					console.debug('Media recorder ended,', $currentStatus);
+					console.debug(`Media recorder ended | ${$currentStatus}`);
 
 					if ($currentStatus === $status.thinking) {
 						const soundClips = document.querySelector('.sound-clips');
