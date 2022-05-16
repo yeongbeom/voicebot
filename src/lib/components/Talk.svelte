@@ -87,14 +87,14 @@
 				recognition.interimResults = true;
 
 				recognition.onstart = () => {
-					console.debug('Speech recognition started');
+					console.debug('Speech recognition started,', $currentStatus);
 
 					if ($currentStatus === $status.idle) {
 						if (audioSource && audioSource.removeEventListenr) {
 							audioSource.removeEventListenr('ended', setIdle);
 						}
 						mediaRecorder.start();
-						console.debug('Media recorder started');
+						console.debug('Media recorder started,', $currentStatus);
 					} else {
 						setTimeout(() => {
 							recognition.stop();
@@ -126,7 +126,7 @@
 				// };
 
 				recognition.onend = () => {
-					console.debug('Speech recognition ended', $currentStatus);
+					console.debug('Speech recognition ended,', $currentStatus);
 
 					if (active) {
 						if (mediaRecorder.state === 'recording') {
@@ -164,7 +164,7 @@
 				};
 
 				mediaRecorder.onstop = (e) => {
-					console.debug('Media recorder ended');
+					console.debug('Media recorder ended,', $currentStatus);
 
 					if ($currentStatus === $status.thinking) {
 						const soundClips = document.querySelector('.sound-clips');
