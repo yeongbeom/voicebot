@@ -12,7 +12,7 @@
 	import { debugMode } from '$lib/stores/config';
 	import { ttsApiKey } from '$lib/stores/api-keys';
 
-	let active = false;
+	let isActive = false;
 	let errorNoReason = false;
 
 	let chunks = [];
@@ -70,7 +70,7 @@
 	onMount(() => {
 		console.debug('talk.svelte mounted');
 
-		active = true;
+		isActive = true;
 
 		const audioCtx = new AudioContext();
 		let audioSource;
@@ -130,23 +130,18 @@
 				recognition.onend = () => {
 					console.debug(`Speech recognition ended | ${$currentStatus}`);
 
-					if (active) {
-						if (mediaRecorder.state === 'recording') {
-							mediaRecorder.stop();
-						}
+					if (!isActive) return;
 
-						if ($currentStatus === $status.listening) {
-							$currentStatus = $status.thinking;
-						}
-
-						recognition.start();
-					}
+					if (mediaRecorder.state === 'recording') mediaRecorder.stop();
+					if ($currentStatus === $status.listening) $currentStatus = $status.thinking;
 
 					if (errorNoReason) {
 						console.error('Error occurred without reason');
 						// $currentStatus = $status.idle;
 						errorNoReason = false;
 					}
+
+					recognition.start();
 				};
 
 				recognition.start();
@@ -216,6 +211,9 @@
 				};
 			} catch (err) {
 				console.error(err);
+				stream = await navigator.mediaDevices.getUserMedia(constraints);
+				mediaRecorder = new MediaRecorder(stream);
+				console.error('MediaRecorder restarted');
 			}
 		};
 
@@ -226,7 +224,7 @@
 
 	onDestroy(() => {
 		console.debug('talk.svelte destroyed');
-		active = false;
+		isActive = false;
 
 		$currentStatus === $status.idle;
 		console.debug('status reset to idle');
