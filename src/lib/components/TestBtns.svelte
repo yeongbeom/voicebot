@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Button from '$lib/shared/button.svelte';
+	import Button from '$lib/shared/Button.svelte';
 	import { currentExpression, currentStatus, isTalking } from '$lib/stores/bot';
 
 	const changeExpression = (e) => {
