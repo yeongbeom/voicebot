@@ -150,69 +150,72 @@
 			}
 		};
 
-		const talk = async () => {
+		const startMediaRecorder = async () => {
 			const constraints = {
 				audio: true
 			};
 
-			try {
-				stream = await navigator.mediaDevices.getUserMedia(constraints);
-				console.debug('VAD:', stream);
-				mediaRecorder = new MediaRecorder(stream);
+			stream = await navigator.mediaDevices.getUserMedia(constraints);
+			console.debug('VAD:', stream);
+			mediaRecorder = new MediaRecorder(stream);
 
-				gnSpeechRecognition(mediaRecorder);
+			gnSpeechRecognition(mediaRecorder);
 
-				mediaRecorder.ondataavailable = (e) => {
-					chunks.push(e.data);
-				};
+			mediaRecorder.ondataavailable = (e) => {
+				chunks.push(e.data);
+			};
 
-				mediaRecorder.onstop = (e) => {
-					console.debug(`Media recorder ended | ${$currentStatus}`);
+			mediaRecorder.onstop = (e) => {
+				console.debug(`Media recorder ended | ${$currentStatus}`);
 
-					if ($currentStatus === $status.thinking) {
-						const soundClips = document.querySelector('.sound-clips');
-						const blob = new Blob(chunks, {
-							type: 'audio/webm; codecs=opus'
-						});
-						if ($debugMode) {
-							const clipContainer = document.createElement('article');
-							const audio = document.createElement('audio');
-
-							clipContainer.classList.add('clip');
-							audio.setAttribute('controls', '');
-
-							clipContainer.appendChild(audio);
-							soundClips.appendChild(clipContainer);
-
-							const audioURL = window.URL.createObjectURL(blob);
-							audio.src = audioURL;
-						}
-						reader.readAsDataURL(blob);
-					}
-					chunks = [];
-				};
-
-				reader.onloadend = async () => {
-					const base64data = reader.result;
-					const empathyRes = await fetchEmpathyData(base64data);
-					const audioData = await fetchTtsData(empathyRes);
-
-					audioCtx.decodeAudioData(audioData, (buffer) => {
-						audioSource = audioCtx.createBufferSource();
-						audioSource.addEventListener('ended', setIdle);
-						audioSource.buffer = buffer;
-						audioSource.connect(audioCtx.destination);
-						audioSource.start(0);
+				if ($currentStatus === $status.thinking) {
+					const soundClips = document.querySelector('.sound-clips');
+					const blob = new Blob(chunks, {
+						type: 'audio/webm; codecs=opus'
 					});
-					$currentExpression = $expression[`${empathyRes.emotion}`];
+					if ($debugMode) {
+						const clipContainer = document.createElement('article');
+						const audio = document.createElement('audio');
 
-					$currentStatus = $status.talking;
-					$say = empathyRes.text;
-				};
+						clipContainer.classList.add('clip');
+						audio.setAttribute('controls', '');
+
+						clipContainer.appendChild(audio);
+						soundClips.appendChild(clipContainer);
+
+						const audioURL = window.URL.createObjectURL(blob);
+						audio.src = audioURL;
+					}
+					reader.readAsDataURL(blob);
+				}
+				chunks = [];
+			};
+
+			reader.onloadend = async () => {
+				const base64data = reader.result;
+				const empathyRes = await fetchEmpathyData(base64data);
+				const audioData = await fetchTtsData(empathyRes);
+
+				audioCtx.decodeAudioData(audioData, (buffer) => {
+					audioSource = audioCtx.createBufferSource();
+					audioSource.addEventListener('ended', setIdle);
+					audioSource.buffer = buffer;
+					audioSource.connect(audioCtx.destination);
+					audioSource.start(0);
+				});
+				$currentExpression = $expression[`${empathyRes.emotion}`];
+
+				$currentStatus = $status.talking;
+				$say = empathyRes.text;
+			};
+		};
+
+		const talk = async () => {
+			try {
+				startMediaRecorder();
 			} catch (err) {
-				console.error(err);
-				stream = await navigator.mediaDevices.getUserMedia(constraints);
-				mediaRecorder = new MediaRecorder(stream);
+				console.error('talk function:', err);
+				startMediaRecorder();
 				console.error('MediaRecorder restarted');
 			}
 		};
