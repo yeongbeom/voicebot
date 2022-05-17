@@ -24,7 +24,7 @@ VITE_TTS_API_KEY={apikey}
 
 ```bash
 npm i
-npm run dev -- --https
+npm run dev -- --host --https
 ```
 
 ## HTTPS
