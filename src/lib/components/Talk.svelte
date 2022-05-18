@@ -78,7 +78,6 @@
 			$currentStatus = $status.idle;
 		};
 
-		const reader = new FileReader();
 		const gnSpeechRecognition = (mediaRecorder) => {
 			if ((window as any).SpeechRecognition || (window as any).webkitSpeechRecognition) {
 				// @ts-ignore
@@ -150,16 +149,8 @@
 			}
 		};
 
-		const startMediaRecorder = async () => {
-			const constraints = {
-				audio: true
-			};
-
-			stream = await navigator.mediaDevices.getUserMedia(constraints);
-			console.debug('VAD:', stream);
+		const startMediaRecorder = async (stream) => {
 			mediaRecorder = new MediaRecorder(stream);
-
-			gnSpeechRecognition(mediaRecorder);
 
 			mediaRecorder.ondataavailable = (e) => {
 				chunks.push(e.data);
@@ -173,6 +164,7 @@
 					const blob = new Blob(chunks, {
 						type: 'audio/webm; codecs=opus'
 					});
+
 					if ($debugMode) {
 						const clipContainer = document.createElement('article');
 						const audio = document.createElement('audio');
@@ -186,37 +178,51 @@
 						const audioURL = window.URL.createObjectURL(blob);
 						audio.src = audioURL;
 					}
+
+					const reader = new FileReader();
 					reader.readAsDataURL(blob);
+					reader.onloadend = async () => {
+						const base64data = reader.result;
+						const empathyRes = await fetchEmpathyData(base64data);
+						const audioData = await fetchTtsData(empathyRes);
+
+						audioCtx.decodeAudioData(audioData, (buffer) => {
+							audioSource = audioCtx.createBufferSource();
+							audioSource.addEventListener('ended', setIdle);
+							audioSource.buffer = buffer;
+							audioSource.connect(audioCtx.destination);
+							audioSource.start(0);
+						});
+						$currentExpression = $expression[`${empathyRes.emotion}`];
+
+						$currentStatus = $status.talking;
+						$say = empathyRes.text;
+					};
 				}
 				chunks = [];
 			};
 
-			reader.onloadend = async () => {
-				const base64data = reader.result;
-				const empathyRes = await fetchEmpathyData(base64data);
-				const audioData = await fetchTtsData(empathyRes);
+			mediaRecorder.onError = (e: MediaRecorderErrorEvent) => {
+				const error = e.error;
+				console.error(`startMediaRecorder: ${error}`);
 
-				audioCtx.decodeAudioData(audioData, (buffer) => {
-					audioSource = audioCtx.createBufferSource();
-					audioSource.addEventListener('ended', setIdle);
-					audioSource.buffer = buffer;
-					audioSource.connect(audioCtx.destination);
-					audioSource.start(0);
-				});
-				$currentExpression = $expression[`${empathyRes.emotion}`];
-
-				$currentStatus = $status.talking;
-				$say = empathyRes.text;
+				mediaRecorder.resume();
+				console.debug('MediaRecorder resumed');
 			};
 		};
 
 		const talk = async () => {
 			try {
-				startMediaRecorder();
+				const constraints = {
+					audio: true
+				};
+
+				stream = await navigator.mediaDevices.getUserMedia(constraints);
+				console.debug('VAD:', stream);
+				startMediaRecorder(stream);
+				gnSpeechRecognition(mediaRecorder);
 			} catch (err) {
-				console.error('talk function:', err);
-				startMediaRecorder();
-				console.error('MediaRecorder restarted');
+				console.error('In talk function:', err);
 			}
 		};
 
