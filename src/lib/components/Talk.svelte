@@ -104,7 +104,7 @@
 						console.debug(`Media recorder started | ${$currentStatus}`);
 					} else {
 						if ($currentStatus === $status.thinking && watchdogTimer < 5) {
-							console.debug(`$watchdogTimer: ${watchdogTimer} times`);
+							console.debug(`watchdogTimer: ${watchdogTimer} times`);
 							watchdogTimer++;
 						} else {
 							console.error('Deadlock: current status is forcibly set to idle');
