@@ -202,7 +202,7 @@
 				chunks = [];
 			};
 
-			mediaRecorder.onError = (e: MediaRecorderErrorEvent) => {
+			mediaRecorder.onerror = (e: MediaRecorderErrorEvent) => {
 				const error = e.error;
 				console.error(`startMediaRecorder: ${error}`);
 
