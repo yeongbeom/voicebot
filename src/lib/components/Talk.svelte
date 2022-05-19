@@ -14,12 +14,17 @@
 
 	let isActive = false;
 	let errorNoReason = false;
+	let watchdogTimer = 0;
 
 	let chunks = [];
 
 	let recognition = null;
 	let mediaRecorder = null;
 	let stream = null;
+
+	const setIdle = () => {
+		$currentStatus = $status.idle;
+	};
 
 	const fetchTtsData = async (empathyRes: EmpathyRes) => {
 		const synthesize_url = 'https://kakaoi-newtone-openapi.kakao.com/v1/synthesize';
@@ -38,8 +43,10 @@
 		});
 
 		if (!res.ok) {
+			setIdle();
+			console.error('Current status is forcibly set to idle');
 			const message = await res.text();
-			throw new Error(message);
+			throw new Error(`In fetchTtsData function: ${message}`);
 		}
 
 		return await res.arrayBuffer();
@@ -60,8 +67,10 @@
 		});
 
 		if (!res.ok) {
+			setIdle();
+			console.error('Current status is forcibly set to idle');
 			const message = await res.text();
-			throw new Error(message);
+			throw new Error(`In fetchEmpathyData function: ${message}`);
 		}
 
 		return await res.json();
@@ -74,9 +83,6 @@
 
 		const audioCtx = new AudioContext();
 		let audioSource;
-		const setIdle = () => {
-			$currentStatus = $status.idle;
-		};
 
 		const gnSpeechRecognition = (mediaRecorder) => {
 			if ((window as any).SpeechRecognition || (window as any).webkitSpeechRecognition) {
@@ -90,12 +96,21 @@
 					console.debug(`Speech recognition started | ${$currentStatus}`);
 
 					if ($currentStatus === $status.idle) {
+						watchdogTimer = 0;
 						if (audioSource && audioSource.removeEventListenr) {
 							audioSource.removeEventListenr('ended', setIdle);
 						}
 						mediaRecorder.start();
 						console.debug(`Media recorder started | ${$currentStatus}`);
 					} else {
+						if ($currentStatus === $status.thinking && watchdogTimer < 10) {
+							console.debug(`$watchdogTimer: {watchdogTimer} times`);
+							watchdogTimer++;
+						} else {
+							console.error('Deadlock: current status is forcibly set to idle');
+							setIdle();
+						}
+
 						setTimeout(() => {
 							recognition.stop();
 						}, 200);
@@ -204,7 +219,7 @@
 
 			mediaRecorder.onerror = (e: MediaRecorderErrorEvent) => {
 				const error = e.error;
-				console.error(`startMediaRecorder: ${error}`);
+				console.error(`In startMediaRecorder function: ${error}`);
 
 				mediaRecorder.resume();
 				console.debug('MediaRecorder resumed');
