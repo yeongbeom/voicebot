@@ -108,6 +108,7 @@
 							watchdogTimer++;
 						} else {
 							console.error('Deadlock: current status is forcibly set to idle');
+							startMediaRecorder(stream);
 							setIdle();
 						}
 
@@ -165,6 +166,8 @@
 		};
 
 		const startMediaRecorder = async (stream) => {
+			if (mediaRecorder !== null && mediaRecorder.state !== 'inactive') mediaRecorder.stop();
+
 			mediaRecorder = new MediaRecorder(stream);
 
 			mediaRecorder.ondataavailable = (e) => {
