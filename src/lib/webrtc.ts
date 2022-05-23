@@ -44,7 +44,6 @@ const webrtcStart = (offerEndpoint, webrtcParams, domElem, userId) => {
 	}
 
 	let constraints = {
-		audio: webrtcParams['use-audio'],
 		video: webrtcParams['use-video']
 	};
 
@@ -52,14 +51,13 @@ const webrtcStart = (offerEndpoint, webrtcParams, domElem, userId) => {
 		let videoResolution = webrtcParams['video-resolution'].split('x');
 		constraints.video = {
 			width: parseInt(videoResolution[0], 0),
-			height: parseInt(videoResolution[1], 0)
+			height: parseInt(videoResolution[1], 0),
+			frameRate: 10
 		};
 	}
 
-	if (constraints.audio || constraints.video) {
-		if (constraints.video) {
-			domElem.mediaDiv.style.display = 'block';
-		}
+	if (constraints.video) {
+		domElem.mediaDiv.style.display = 'block';
 		navigator.mediaDevices.getUserMedia(constraints).then(
 			function (stream) {
 				console.debug('WebRTC:', stream);
@@ -150,17 +148,13 @@ const createPeerConnection = (useStun, domElem) => {
 	pc.addEventListener('track', function (evt) {
 		if (evt.track.kind == 'video') {
 			domElem.webrtcVideo.srcObject = evt.streams[0];
-		} else {
-			domElem.webrtcAudio.srcObject = evt.streams[0];
 		}
 	});
 
 	return pc;
 };
 
-const fetchOffer = async () => {
-
-};
+const fetchOffer = async () => {};
 
 const negotiate = (pc, webrtcParams, offerEndpoint, userId) => {
 	return pc
@@ -187,11 +181,6 @@ const negotiate = (pc, webrtcParams, offerEndpoint, userId) => {
 		.then(function () {
 			let offer = pc.localDescription;
 			let codec;
-
-			codec = webrtcParams['audio-codec'];
-			if (codec !== 'default') {
-				offer.sdp = sdpFilterCodec('audio', codec, offer.sdp);
-			}
 
 			codec = webrtcParams['video-codec'];
 			if (codec !== 'default') {

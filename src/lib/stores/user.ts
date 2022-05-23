@@ -1,4 +1,4 @@
 import { readable } from 'svelte/store';
 
 
-// export const userId = readable("temp-id")
+// export const userId = readable("keti-id")

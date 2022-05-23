@@ -26,7 +26,7 @@
 	};
 	let webrtcLocal, webrtcRemote;
 
-	const userId = 'temp-id'; // [TODO] connect to db
+	const userId = 'keti-id'; // [TODO] connect to db
 
 	onMount(() => {
 		const genDomElem = (name = '') => {
@@ -46,27 +46,14 @@
 		const domElemRemote = genDomElem('-remote');
 
 		try {
-			webrtcLocal = webrtcStart(
-				$endpoints.offerLocalEndpoint,
-				webrtcParams,
-				domElemLocal,
-				userId
-			);
 			webrtcRemote = webrtcStart(
 				$endpoints.offerRemoteEndpoint,
 				webrtcParamsKeti,
 				domElemRemote,
 				userId
 			);
-			domElemLocal.startBtn.style.display = 'none';
-			domElemLocal.stopBtn.style.display = 'inline-block';
 			domElemRemote.startBtn.style.display = 'none';
 			domElemRemote.stopBtn.style.display = 'inline-block';
-
-			domElemLocal.stopBtn.onclick = () => {
-				webrtcStop(webrtcLocal);
-				domElemLocal.stopBtn.style.display = 'none';
-			};
 
 			domElemRemote.stopBtn.onclick = () => {
 				webrtcStop(webrtcRemote);
@@ -79,28 +66,6 @@
 </script>
 
 <div class="flex-container">
-	<div class="flex-col">
-		<h1>GNICT</h1>
-		<button id="start-local">Start</button>
-		<button id="stop-local" style="display: none">Stop</button>
-
-		<h2>State</h2>
-		<p>ICE gathering state: <span id="ice-gathering-state-local" /></p>
-		<p>ICE connection state: <span id="ice-connection-state-local" /></p>
-		<p>Signaling state: <span id="signaling-state-local" /></p>
-
-		<div id="media-local" style="display: none">
-			<h2>Media</h2>
-
-			<audio id="webrtc-audio-local" autoplay />
-			<video id="webrtc-video-local" autoplay playsinline>
-				<track kind="captions" />
-			</video>
-		</div>
-
-		<h2>Data channel</h2>
-		<pre id="data-channel-local" style="height: 200px" />
-	</div>
 	<div class="flex-col">
 		<h1>KETI</h1>
 		<button id="start-remote">Start</button>

@@ -4,11 +4,10 @@ import { readable } from 'svelte/store';
 /*                                API endpoints                               */
 /* -------------------------------------------------------------------------- */
 const gnictProcPort = '20080';
-const gnictHost = "gnlabs.iptime.org";
+const gnictHost = '10.1.93.21';
 
 const ketiPort = '28443';
-// const ketiHost = "ketiair.com";
-const ketiHost = "115.95.228.155";
+const ketiHost = 'ketiair.com';
 
 /* -------------------------------------------------------------------------- */
 /*                                Don't change                                */
@@ -18,7 +17,7 @@ const pathTalk = 'talk';
 const pathOffer = 'offer';
 
 export const endpoints = readable({
-	offerLocalEndpoint: `${protocol}://${gnictHost}:${gnictProcPort}/${pathOffer}`,
+	// offerLocalEndpoint: `${protocol}://${gnictHost}:${gnictProcPort}/${pathOffer}`,
 	talkEndpoint: `${protocol}://${ketiHost}:${ketiPort}/${pathTalk}`,
 	offerRemoteEndpoint: `${protocol}://${ketiHost}:${ketiPort}/${pathOffer}`
 });

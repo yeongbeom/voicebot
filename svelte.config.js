@@ -16,10 +16,14 @@ const config = {
 		vite: {
 			server: {
 				hmr: {
+					clientPort: 20443,
+					host: '10.1.93.21'
+					/*
 					clientPort: process.env.HMR_HOST ? 443 : 3000,
 					host: process.env.HMR_HOST
 						? process.env.HMR_HOST.substring('https://'.length)
 						: 'localhost'
+					*/
 				}
 			}
 		}

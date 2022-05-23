@@ -11,6 +11,7 @@
 	import { endpoints } from '$lib/stores/endpoints';
 	import { debugMode } from '$lib/stores/config';
 	import { ttsApiKey } from '$lib/stores/api-keys';
+	import axios from 'axios';
 
 	let isActive = false;
 	let errorNoReason = false;
@@ -21,13 +22,125 @@
 	let mediaRecorder = null;
 	let stream = null;
 
+	let recog_error = null;
+
+	function sleep(ms) {
+		console.log('sleep ' + ms + 'ms');
+		return new Promise((r) => setTimeout(r, ms));
+	}
+
+	const setIdle = () => {
+		$currentStatus = $status.idle;
+		if ($currentStatus === $status.idle) {
+			recognition.start();
+		}
+	};
+
+	let voices = [];
+
+	function setVoiceList() {
+		voices = window.speechSynthesis.getVoices();
+	}
+
+	function Web_Speech_API_TTS(empathyRes) {
+		setVoiceList();
+		if (window.speechSynthesis.onvoiceschanged !== undefined) {
+			window.speechSynthesis.onvoiceschanged = setVoiceList;
+		}
+
+		if (!window.speechSynthesis) {
+			console.log(
+				'음성 재생을 지원하지 않는 브라우저입니다. 크롬, 파이어폭스 등의 최신 브라우저를 이용하세요'
+			);
+			return;
+		}
+
+		var lang = 'ko-KR';
+
+		var utterThis = new SpeechSynthesisUtterance(empathyRes.text);
+
+		utterThis.onend = function (event) {
+			setIdle();
+		};
+
+		utterThis.onerror = function (event) {
+			console.log('error', event);
+		};
+
+		var voiceFound = false;
+
+		for (var i = 0; i < voices.length; i++) {
+			if (
+				voices[i].lang.indexOf(lang) >= 0 ||
+				voices[i].lang.indexOf(lang.replace('-', '_')) >= 0
+			) {
+				utterThis.voice = voices[i];
+				voiceFound = true;
+			}
+			if (i == voices.length - 1 && !voiceFound) {
+				console.log('voice not found');
+				return;
+			}
+		}
+
+		utterThis.lang = lang;
+		utterThis.pitch = 1;
+		utterThis.rate = 1;
+		console.log(utterThis);
+
+		window.speechSynthesis.speak(utterThis);
+
+		/*
+		const speechMsg = new SpeechSynthesisUtterance()
+
+		speechMsg.lang = 'ko-KR';
+		speechMsg.pitch = 1;
+		speechMsg.rate = 1;
+		speechMsg.text = empathyRes.text;
+		window.speechSynthesis.speak(speechMsg);
+		*/
+	}
+
 	const fetchTtsData = async (empathyRes: EmpathyRes) => {
+		/*
+		const synthesize_url = 'https://naveropenapi.apigw.ntruss.com/voice/v1/tts';
+		const headers_synth = {
+			'Content-Type': 'application/x-www-form-urlencoded',
+			'X-NCP-APIGW-API-KEY-ID': '',
+			'X-NCP-APIGW-API-KEY': ''
+		};
+		const res = await fetch(synthesize_url, {
+			method: 'POST',
+			headers: headers_synth,
+			body: JSON.stringify({
+				data: 'speaker=mijin&speed=0&text=만나서 반갑습니다'
+			})
+		});
+		console.log(res);
+		*/
+		/*
+		const synthesize_url =
+			'https://speech.api.nhncloudservice.com/v1.0/appkeys/qD9Ea8c5mWL3udXa/tts';
+		const headers_synth = {
+			'Content-Type': 'application/json',
+			Authorization: ''
+		};
+		const res = await fetch(synthesize_url, {
+			method: 'POST',
+			headers: headers_synth,
+			body: JSON.stringify({
+				inputText: 'hi'
+			})
+		});
+		console.log(res);
+		*/
+
 		const synthesize_url = 'https://kakaoi-newtone-openapi.kakao.com/v1/synthesize';
 		const headers_synth = {
 			'Content-Type': 'application/xml',
-			Authorization: `KakaoAK ${$ttsApiKey}`
+			Authorization: 'KakaoAK ${$ttsApiKey}'
 		};
-		const synth_in = `<speak> <voice name='WOMAN_DIALOG_BRIGHT'> ${empathyRes.text} </voice> </speak>`;
+		const synth_in = `<speak> <voice name='WOMAN_READ_CALM'> ${empathyRes.text} </voice> </speak>`;
 
 		const res = await fetch(synthesize_url, {
 			method: 'POST',
@@ -46,10 +159,11 @@
 	};
 
 	const fetchEmpathyData = async (base64data) => {
+		console.log('base64data: ' + base64data.slice(-10));
 		const empahtyReq: EmpathyReq = {
 			audio: base64data,
 			text: $heard,
-			uid: 'temp-uid' // [TODO] connect to db
+			uid: 'keti-id' // [TODO] connect to db
 		};
 		const res = await fetch($endpoints.talkEndpoint, {
 			method: 'POST',
@@ -70,13 +184,12 @@
 	onMount(() => {
 		console.debug('talk.svelte mounted');
 
+		// setVoiceList();
+
 		isActive = true;
 
 		const audioCtx = new AudioContext();
 		let audioSource;
-		const setIdle = () => {
-			$currentStatus = $status.idle;
-		};
 
 		const gnSpeechRecognition = (mediaRecorder) => {
 			if ((window as any).SpeechRecognition || (window as any).webkitSpeechRecognition) {
@@ -89,17 +202,11 @@
 				recognition.onstart = () => {
 					console.debug(`Speech recognition started | ${$currentStatus}`);
 
-					if ($currentStatus === $status.idle) {
-						if (audioSource && audioSource.removeEventListenr) {
-							audioSource.removeEventListenr('ended', setIdle);
-						}
-						mediaRecorder.start();
-						console.debug(`Media recorder started | ${$currentStatus}`);
-					} else {
-						setTimeout(() => {
-							recognition.stop();
-						}, 200);
+					if (audioSource && audioSource.removeEventListenr) {
+						audioSource.removeEventListenr('ended', setIdle);
 					}
+					mediaRecorder.start();
+					console.debug(`Media recorder started | ${$currentStatus}`);
 				};
 
 				recognition.onresult = (e) => {
@@ -121,8 +228,9 @@
 					}
 				};
 
-				recognition.onerror = () => {
-					console.error('Speech Recognition Error');
+				recognition.onerror = (e: SpeechRecognitionErrorEvent) => {
+					recog_error = e.error;
+					// console.error('Speech Recognition Error: ' + recog_error);
 					errorNoReason = true;
 				};
 
@@ -134,13 +242,21 @@
 					if (mediaRecorder.state === 'recording') mediaRecorder.stop();
 					if ($currentStatus === $status.listening) $currentStatus = $status.thinking;
 
-					if (errorNoReason) {
-						console.error('Error occurred without reason');
+					if (errorNoReason && recog_error !== 'no-speech') {
+						console.error('Error occurred by ' + recog_error);
+						if (recog_error == 'audio-capture') {
+							console.log('MediaRecorder resume!');
+							console.log('currentStatus: ' + $currentStatus);
+							mediaRecorder.resume();
+						}
+						// console.error('Error occurred without reason');
 						// $currentStatus = $status.idle;
 						errorNoReason = false;
 					}
 
-					recognition.start();
+					if ($currentStatus === $status.idle) {
+						recognition.start();
+					}
 				};
 
 				recognition.start();
@@ -184,8 +300,12 @@
 					reader.onloadend = async () => {
 						const base64data = reader.result;
 						const empathyRes = await fetchEmpathyData(base64data);
-						const audioData = await fetchTtsData(empathyRes);
 
+						Web_Speech_API_TTS(empathyRes);
+
+						/*
+						const audioData = await fetchTtsData(empathyRes);
+						
 						audioCtx.decodeAudioData(audioData, (buffer) => {
 							audioSource = audioCtx.createBufferSource();
 							audioSource.addEventListener('ended', setIdle);
@@ -193,6 +313,8 @@
 							audioSource.connect(audioCtx.destination);
 							audioSource.start(0);
 						});
+						*/
+
 						$currentExpression = $expression[`${empathyRes.emotion}`];
 
 						$currentStatus = $status.talking;
@@ -202,13 +324,23 @@
 				chunks = [];
 			};
 
+			mediaRecorder.onerror = (event) => {
+				console.log('MediaRecorder error occurred!!!');
+				console.error('mediaRecorder error: ${event.error.name}');
+				mediaRecorder.resume();
+				console.log('MediaRecorder resumed');
+			};
+			/*
 			mediaRecorder.onerror = (e: MediaRecorderErrorEvent) => {
 				const error = e.error;
+				console.log('mediaRecorder error: ' + error);
 				console.error(`startMediaRecorder: ${error}`);
 
 				mediaRecorder.resume();
+				console.log('MediaRecorder resumed');
 				console.debug('MediaRecorder resumed');
 			};
+			*/
 		};
 
 		const talk = async () => {
