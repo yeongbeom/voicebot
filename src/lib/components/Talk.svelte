@@ -10,10 +10,12 @@
 	} from '$lib/stores/bot';
 	import { endpoints } from '$lib/stores/endpoints';
 	import { debugMode } from '$lib/stores/config';
+	import { ttsApiKey } from '$lib/stores/api-keys';
 
 	let isActive = false;
 	let errorNoReason = false;
 	let watchdogTimer = 0;
+	const reloadDelay = 60 * 60 * 12;
 
 	let chunks = [];
 
@@ -25,61 +27,32 @@
 		$currentStatus = $status.idle;
 	};
 
-	const _base64ToArrayBuffer = (base64: string) => {
-		var binary_string = window.atob(base64);
-		var len = binary_string.length;
-		var bytes = new Uint8Array(len);
-		for (var i = 0; i < len; i++) {
-			bytes[i] = binary_string.charCodeAt(i);
-		}
-		return bytes.buffer;
-	};
-
 	const fetchTtsData = async (empathyRes: EmpathyRes) => {
-		const res = await fetch('http://115.95.228.155:3128', {
-			method: 'post',
-			headers: {
-				'Content-Type': 'application/json'
-			},
+		const synthesize_url = 'https://kakaoi-newtone-openapi.kakao.com/v1/synthesize';
+		const headers_synth = {
+			'Content-Type': 'application/xml',
+			Authorization: `KakaoAK ${$ttsApiKey}`
+		};
+		const synth_in = `<speak> <voice name='WOMAN_DIALOG_BRIGHT'> ${empathyRes.text} </voice> </speak>`;
+		const res = await fetch(synthesize_url, {
+			method: 'POST',
+			headers: headers_synth,
 			body: JSON.stringify({
-				text: empathyRes.text
+				data: synth_in
 			})
 		});
-
 		if (!res.ok) {
 			const message = await res.text();
-			throw new Error(`[fetchEmpathyData] ${message}`);
+			throw new Error(message);
 		}
-		return await res.json();
-
-		// const synthesize_url = 'https://kakaoi-newtone-openapi.kakao.com/v1/synthesize';
-		// const headers_synth = {
-		// 	'Content-Type': 'application/xml',
-		// 	Authorization: `KakaoAK ${$ttsApiKey}`
-		// };
-		// const synth_in = `<speak> <voice name='WOMAN_DIALOG_BRIGHT'> ${empathyRes.text} </voice> </speak>`;
-
-		// const res = await fetch(synthesize_url, {
-		// 	method: 'POST',
-		// 	headers: headers_synth,
-		// 	body: JSON.stringify({
-		// 		data: synth_in
-		// 	})
-		// });
-
-		// if (!res.ok) {
-		// 	const message = await res.text();
-		// 	throw new Error(`In fetchTtsData function: ${message}`);
-		// }
-
-		// return await res.arrayBuffer();
+		return await res.arrayBuffer();
 	};
 
-	const fetchEmpathyData = async (base64data) => {
+	const fetchEmpathyData = async (base64data, text, uid) => {
 		const empahtyReq: EmpathyReq = {
 			audio: base64data,
-			text: $heard,
-			uid: 'temp-uid' // [TODO] connect to db
+			text,
+			uid
 		};
 		const res = await fetch($endpoints.talkEndpoint, {
 			method: 'POST',
@@ -91,7 +64,7 @@
 
 		if (!res.ok) {
 			const message = await res.text();
-			throw new Error(`[fetchEmpathyData] ${message}`);
+			throw new Error(message);
 		}
 
 		return await res.json();
@@ -129,7 +102,12 @@
 							watchdogTimer++;
 						} else if ($currentStatus === $status.thinking) {
 							console.error('Deadlock');
-							// window.location.reload();
+
+							// [TODO] solve deadlock issue
+
+							setTimeout(() => {
+								window.location.reload();
+							}, reloadDelay);
 						}
 
 						setTimeout(() => {
@@ -219,10 +197,8 @@
 					reader.readAsDataURL(blob);
 					reader.onloadend = async () => {
 						const base64data = reader.result;
-						const empathyRes = await fetchEmpathyData(base64data);
-						// const audioData = await fetchTtsData(empathyRes);
-						const { base64String } = await fetchTtsData(empathyRes);
-						const audioData = _base64ToArrayBuffer(base64String);
+						const empathyRes = await fetchEmpathyData(base64data, $heard, 'temp-uid'); // [TODO] connect to db
+						const audioData = await fetchTtsData(empathyRes);
 
 						audioCtx.decodeAudioData(audioData, (buffer) => {
 							audioSource = audioCtx.createBufferSource();
@@ -242,7 +218,7 @@
 
 			mediaRecorder.onerror = (e: MediaRecorderErrorEvent) => {
 				const error = e.error;
-				console.error(`[startMediaRecorder] ${error}`);
+				console.error(error);
 
 				mediaRecorder.resume();
 				console.debug('MediaRecorder resumed');
@@ -260,7 +236,7 @@
 				startMediaRecorder(stream);
 				gnSpeechRecognition(mediaRecorder);
 			} catch (err) {
-				console.error(`[talk] ${err}`);
+				console.error(err);
 			}
 		};
 
