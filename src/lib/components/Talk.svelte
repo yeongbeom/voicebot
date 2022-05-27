@@ -129,7 +129,7 @@
 							watchdogTimer++;
 						} else if ($currentStatus === $status.thinking) {
 							console.error('Deadlock');
-							window.location.reload();
+							// window.location.reload();
 						}
 
 						setTimeout(() => {
