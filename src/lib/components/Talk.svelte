@@ -10,7 +10,6 @@
 	} from '$lib/stores/bot';
 	import { endpoints } from '$lib/stores/endpoints';
 	import { debugMode } from '$lib/stores/config';
-	import { ttsApiKey } from '$lib/stores/api-keys';
 
 	let isActive = false;
 	let errorNoReason = false;
@@ -26,30 +25,54 @@
 		$currentStatus = $status.idle;
 	};
 
-	const fetchTtsData = async (empathyRes: EmpathyRes) => {
-		const synthesize_url = 'https://kakaoi-newtone-openapi.kakao.com/v1/synthesize';
-		const headers_synth = {
-			'Content-Type': 'application/xml',
-			Authorization: `KakaoAK ${$ttsApiKey}`
-		};
-		const synth_in = `<speak> <voice name='WOMAN_DIALOG_BRIGHT'> ${empathyRes.text} </voice> </speak>`;
+	const _base64ToArrayBuffer = (base64: string) => {
+		var binary_string = window.atob(base64);
+		var len = binary_string.length;
+		var bytes = new Uint8Array(len);
+		for (var i = 0; i < len; i++) {
+			bytes[i] = binary_string.charCodeAt(i);
+		}
+		return bytes.buffer;
+	};
 
-		const res = await fetch(synthesize_url, {
-			method: 'POST',
-			headers: headers_synth,
+	const fetchTtsData = async (empathyRes: EmpathyRes) => {
+		const res = await fetch('http://115.95.228.155:3128', {
+			method: 'post',
+			headers: {
+				'Content-Type': 'application/json'
+			},
 			body: JSON.stringify({
-				data: synth_in
+				text: empathyRes.text
 			})
 		});
 
 		if (!res.ok) {
-			setIdle();
-			console.error('Current status is forcibly set to idle');
 			const message = await res.text();
-			throw new Error(`In fetchTtsData function: ${message}`);
+			throw new Error(`[fetchEmpathyData] ${message}`);
 		}
+		return await res.json();
 
-		return await res.arrayBuffer();
+		// const synthesize_url = 'https://kakaoi-newtone-openapi.kakao.com/v1/synthesize';
+		// const headers_synth = {
+		// 	'Content-Type': 'application/xml',
+		// 	Authorization: `KakaoAK ${$ttsApiKey}`
+		// };
+		// const synth_in = `<speak> <voice name='WOMAN_DIALOG_BRIGHT'> ${empathyRes.text} </voice> </speak>`;
+
+		// const res = await fetch(synthesize_url, {
+		// 	method: 'POST',
+		// 	headers: headers_synth,
+		// 	body: JSON.stringify({
+		// 		data: synth_in
+		// 	})
+		// });
+
+		// if (!res.ok) {
+		// 	const message = await res.text();
+		// 	throw new Error(`In fetchTtsData function: ${message}`);
+		// }
+
+		// return await res.arrayBuffer();
 	};
 
 	const fetchEmpathyData = async (base64data) => {
@@ -67,10 +90,8 @@
 		});
 
 		if (!res.ok) {
-			setIdle();
-			console.error('Current status is forcibly set to idle');
 			const message = await res.text();
-			throw new Error(`In fetchEmpathyData function: ${message}`);
+			throw new Error(`[fetchEmpathyData] ${message}`);
 		}
 
 		return await res.json();
@@ -106,10 +127,9 @@
 						if ($currentStatus === $status.thinking && watchdogTimer < 5) {
 							console.debug(`watchdogTimer: ${watchdogTimer} times`);
 							watchdogTimer++;
-						} else {
-							console.error('Deadlock: current status is forcibly set to idle');
-							startMediaRecorder(stream);
-							setIdle();
+						} else if ($currentStatus === $status.thinking) {
+							console.error('Deadlock');
+							window.location.reload();
 						}
 
 						setTimeout(() => {
@@ -166,8 +186,6 @@
 		};
 
 		const startMediaRecorder = async (stream) => {
-			if (mediaRecorder !== null && mediaRecorder.state !== 'inactive') mediaRecorder.stop();
-
 			mediaRecorder = new MediaRecorder(stream);
 
 			mediaRecorder.ondataavailable = (e) => {
@@ -202,7 +220,9 @@
 					reader.onloadend = async () => {
 						const base64data = reader.result;
 						const empathyRes = await fetchEmpathyData(base64data);
-						const audioData = await fetchTtsData(empathyRes);
+						// const audioData = await fetchTtsData(empathyRes);
+						const { base64String } = await fetchTtsData(empathyRes);
+						const audioData = _base64ToArrayBuffer(base64String);
 
 						audioCtx.decodeAudioData(audioData, (buffer) => {
 							audioSource = audioCtx.createBufferSource();
@@ -222,7 +242,7 @@
 
 			mediaRecorder.onerror = (e: MediaRecorderErrorEvent) => {
 				const error = e.error;
-				console.error(`In startMediaRecorder function: ${error}`);
+				console.error(`[startMediaRecorder] ${error}`);
 
 				mediaRecorder.resume();
 				console.debug('MediaRecorder resumed');
@@ -240,7 +260,7 @@
 				startMediaRecorder(stream);
 				gnSpeechRecognition(mediaRecorder);
 			} catch (err) {
-				console.error('In talk function:', err);
+				console.error(`[talk] ${err}`);
 			}
 		};
 
