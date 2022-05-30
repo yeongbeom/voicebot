@@ -14,12 +14,18 @@
 
 	let isActive = false;
 	let errorNoReason = false;
+	let watchdogTimer = 0;
+	const reloadDelay = 60 * 60 * 12;
 
 	let chunks = [];
 
 	let recognition = null;
 	let mediaRecorder = null;
 	let stream = null;
+
+	const setIdle = () => {
+		$currentStatus = $status.idle;
+	};
 
 	const fetchTtsData = async (empathyRes: EmpathyRes) => {
 		const synthesize_url = 'https://kakaoi-newtone-openapi.kakao.com/v1/synthesize';
@@ -28,7 +34,6 @@
 			Authorization: `KakaoAK ${$ttsApiKey}`
 		};
 		const synth_in = `<speak> <voice name='WOMAN_DIALOG_BRIGHT'> ${empathyRes.text} </voice> </speak>`;
-
 		const res = await fetch(synthesize_url, {
 			method: 'POST',
 			headers: headers_synth,
@@ -36,20 +41,18 @@
 				data: synth_in
 			})
 		});
-
 		if (!res.ok) {
 			const message = await res.text();
 			throw new Error(message);
 		}
-
 		return await res.arrayBuffer();
 	};
 
-	const fetchEmpathyData = async (base64data) => {
+	const fetchEmpathyData = async (base64data, text, uid) => {
 		const empahtyReq: EmpathyReq = {
 			audio: base64data,
-			text: $heard,
-			uid: 'temp-uid' // [TODO] connect to db
+			text,
+			uid
 		};
 		const res = await fetch($endpoints.talkEndpoint, {
 			method: 'POST',
@@ -74,9 +77,6 @@
 
 		const audioCtx = new AudioContext();
 		let audioSource;
-		const setIdle = () => {
-			$currentStatus = $status.idle;
-		};
 
 		const gnSpeechRecognition = (mediaRecorder) => {
 			if ((window as any).SpeechRecognition || (window as any).webkitSpeechRecognition) {
@@ -90,12 +90,26 @@
 					console.debug(`Speech recognition started | ${$currentStatus}`);
 
 					if ($currentStatus === $status.idle) {
+						watchdogTimer = 0;
 						if (audioSource && audioSource.removeEventListenr) {
 							audioSource.removeEventListenr('ended', setIdle);
 						}
 						mediaRecorder.start();
 						console.debug(`Media recorder started | ${$currentStatus}`);
 					} else {
+						if ($currentStatus === $status.thinking && watchdogTimer < 5) {
+							console.debug(`watchdogTimer: ${watchdogTimer} times`);
+							watchdogTimer++;
+						} else if ($currentStatus === $status.thinking) {
+							console.error('Deadlock');
+
+							// [TODO] solve deadlock issue
+
+							setTimeout(() => {
+								window.location.reload();
+							}, reloadDelay);
+						}
+
 						setTimeout(() => {
 							recognition.stop();
 						}, 200);
@@ -183,7 +197,7 @@
 					reader.readAsDataURL(blob);
 					reader.onloadend = async () => {
 						const base64data = reader.result;
-						const empathyRes = await fetchEmpathyData(base64data);
+						const empathyRes = await fetchEmpathyData(base64data, $heard, 'temp-uid'); // [TODO] connect to db
 						const audioData = await fetchTtsData(empathyRes);
 
 						audioCtx.decodeAudioData(audioData, (buffer) => {
@@ -204,7 +218,7 @@
 
 			mediaRecorder.onerror = (e: MediaRecorderErrorEvent) => {
 				const error = e.error;
-				console.error(`startMediaRecorder: ${error}`);
+				console.error(error);
 
 				mediaRecorder.resume();
 				console.debug('MediaRecorder resumed');
@@ -222,7 +236,7 @@
 				startMediaRecorder(stream);
 				gnSpeechRecognition(mediaRecorder);
 			} catch (err) {
-				console.error('In talk function:', err);
+				console.error(err);
 			}
 		};
 
